@@ -1,0 +1,49 @@
+//TODO: Make remove the two last arguments by creating an extra method like the display and displayHELP
+    public ArrayList<ArrayList> fillAray(ArrayList fileLines, ArrayList mainArray, int currentLevel, int nextLine){
+
+        nextLine += 1;
+
+        //Reached end of line in mainArray
+        if(fileLines.size() <= nextLine){
+            System.out.println("We ran out of lines!"); //TODO: TEMP
+            return mainArray;
+        }
+
+        //Calculate the level of the next line
+        int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
+        //System.out.println(nextLineLevel + ": " + fileLines.get(nextLine).toString()); //TODO: TEMP
+        System.out.println(nextLine-1 + ": " + fileLines.get(currentLevel).toString()); //TODO: TEMP
+
+
+        //Next lvl is one lower
+        if(nextLineLevel > currentLevel){
+            System.out.println("Next line is lower!"); //TODO: TEMP
+            //TODO: HOW MANY OF THE NEXT LINES IS LOWER?
+
+            do{
+                mainArray.add(fillAray(fileLines, new ArrayList<ArrayList>(), currentLevel+1, nextLine));
+                nextLine++;
+
+                if(fileLines.size() <= nextLine) {
+                    break;
+                }
+            }while (getLevel(fileLines.get(nextLine).toString()) > currentLevel);
+
+            nextLineLevel = getLevel(fileLines.get(nextLine).toString());
+        }
+
+        //Next line is on same level
+        if(nextLineLevel == currentLevel){
+            System.out.println("Next line is on the same level!"); //TODO: TEMP
+            return mainArray;
+        }
+
+        //Next line is one level above
+        if(nextLineLevel < currentLevel){
+            System.out.println("Next line is above!"); //TODO: TEMP
+            return mainArray;
+        }
+
+        System.out.println("SHOULD NOT GET HERE, END OF fillArray");
+        return mainArray;
+    }

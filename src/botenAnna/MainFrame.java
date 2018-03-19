@@ -19,11 +19,8 @@ public class MainFrame extends JFrame {
         int fcReturn = fc.showDialog(frame, null);
         FileAnalyser fa = new FileAnalyser();
 
-        try {
-            fa.readFile(fc.getSelectedFile());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        fa.getStructureArrey(fc.getSelectedFile());
+
 
         frame.pack();
         frame.setSize(600,600);
