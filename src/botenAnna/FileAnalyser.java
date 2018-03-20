@@ -8,13 +8,12 @@ public class FileAnalyser {
     private int nextLine;
 
     /** Main method to call. */
-    public ArrayList<ArrayList> getStructureArrey(File file){
+    public Node getStructureArrey(File file){
 
         //Get array containing lines from file
         ArrayList<String> fileLines = loadFile(file);
 
         //Analyse fileLines and fill main array
-        ArrayList<ArrayList> mainArray = new ArrayList<>();
         Node mainNode = new Node(fileLines.get(0).toString());
         System.out.println("CALLING RECURSION!"); //TODO: TEMP
         fillArray(fileLines, mainNode);
@@ -48,7 +47,7 @@ public class FileAnalyser {
         displayMainArray(one);
         */
 
-        return null;
+        return mainNode;
     }
 
     public Node fillArray(ArrayList fileLines, Node mainArray){
