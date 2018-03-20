@@ -15,14 +15,12 @@ public class FileAnalyser {
 
         //Analyse fileLines and fill main array
         ArrayList<ArrayList> mainArray = new ArrayList<>();
-        Node mainNode = new Node(fileLines.get(0).toString());
         System.out.println("CALLING RECURSION!"); //TODO: TEMP
-        fillArray(fileLines, mainNode);
+        fillArray(fileLines, mainArray);
         System.out.println("RECURSION CALL ENDED!"); //TODO: TEMP
 
         //Display the array
-        //displayMainArray(mainArray); //TODO: TEMP
-        displayMainNode(mainNode); //TODO: TEMP
+        displayMainArray(mainArray); //TODO: TEMP
 
 
         /*
@@ -51,20 +49,20 @@ public class FileAnalyser {
         return null;
     }
 
-    public Node fillArray(ArrayList fileLines, Node mainArray){
+    public ArrayList<ArrayList> fillArray(ArrayList fileLines, ArrayList mainArray){
 
         nextLine = 0;
 
         return fillArayHELP(fileLines, mainArray, 0);
     }
 
-    public Node fillArayHELP(ArrayList fileLines, Node mainArray, int currentLine){
+    public ArrayList<ArrayList> fillArayHELP(ArrayList fileLines, ArrayList mainArray, int currentLine){
 
         nextLine++;
 
         int currentLineLevel = getLevel(fileLines.get(currentLine).toString());
 
-        //Reached end of lines in fileLines
+        //Reached end of line in mainArray
         if(fileLines.size() <= nextLine){
             System.out.println("We ran out of lines!");
             return mainArray;
@@ -77,7 +75,7 @@ public class FileAnalyser {
         if(nextLineLevel > currentLineLevel){
             do{
                 System.out.println("Next line is lower!");
-                mainArray.addChild(fillArayHELP(fileLines, new Node(fileLines.get(nextLine).toString()), nextLine));
+                mainArray.add(fillArayHELP(fileLines, new ArrayList<ArrayList>(), nextLine));
 
                 if(fileLines.size() <= nextLine) {
                     return mainArray;
@@ -153,27 +151,6 @@ public class FileAnalyser {
             }
         }*/
 
-    }
-
-    public void displayMainNode(Node mainNode){
-        int currentLevel = 0;
-
-        displayMainNodeHELP(mainNode, 0);
-    }
-
-    public void displayMainNodeHELP(Node currentArray, int currentLevel){
-
-        currentLevel++;
-
-        System.out.println(currentArray.getNodeName());
-
-        if(currentArray.getArrayList().size() == 0){
-            return;
-        }else{
-            for(int i = 0; i < currentArray.getArrayList().size(); i++){
-                displayMainNodeHELP(currentArray.getArrayList().get(i), currentLevel);
-            }
-        }
     }
 
     //OLD
