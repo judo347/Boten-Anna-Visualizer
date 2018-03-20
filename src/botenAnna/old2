@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class FileAnalyser {
 
-    private int nextLine;
+
 
     /** Main method to call. */
     public ArrayList<ArrayList> getStructureArrey(File file){
@@ -13,13 +13,16 @@ public class FileAnalyser {
         //Get array containing lines from file
         ArrayList<String> fileLines = loadFile(file);
 
-        //Analyse fileLines and fill main array
+        //System.out.println(fileLines.toString()); //TODO: TMEP
+        //for(int i = 0; i < fileLines.size(); i++) //TEMP
+        //    System.out.println(getLevel(fileLines.get(i).toString())); //TEMP
+
+        //
         ArrayList<ArrayList> mainArray = new ArrayList<>();
         System.out.println("CALLING RECURSION!"); //TODO: TEMP
         fillArray(fileLines, mainArray);
         System.out.println("RECURSION CALL ENDED!"); //TODO: TEMP
 
-        //Display the array
         displayMainArray(mainArray); //TODO: TEMP
 
 
@@ -50,16 +53,12 @@ public class FileAnalyser {
     }
 
     public ArrayList<ArrayList> fillArray(ArrayList fileLines, ArrayList mainArray){
-
-        nextLine = 0;
-
         return fillArayHELP(fileLines, mainArray, 0);
     }
 
     public ArrayList<ArrayList> fillArayHELP(ArrayList fileLines, ArrayList mainArray, int currentLine){
 
-        nextLine++;
-
+        int nextLine = currentLine + 1;
         int currentLineLevel = getLevel(fileLines.get(currentLine).toString());
 
         //Reached end of line in mainArray
@@ -71,23 +70,35 @@ public class FileAnalyser {
         int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
 
 
+
         //Next lvl is one lower
         if(nextLineLevel > currentLineLevel){
             do{
                 System.out.println("Next line is lower!");
                 mainArray.add(fillArayHELP(fileLines, new ArrayList<ArrayList>(), nextLine));
+                nextLine++;
 
-                if(fileLines.size() <= nextLine) {
-                    return mainArray;
+                if(fileLines.size() <= nextLine) { //TODO TEST
+                    break;
                 }
 
                 nextLineLevel = getLevel(fileLines.get(nextLine).toString());
             }while (nextLineLevel > currentLineLevel);
+
+            if(getLevel(fileLines.get(nextLine-1).toString()) == nextLineLevel + 1 ){
+                return mainArray;
+            }
         }
 
         //Next line is on same level
-        if(nextLineLevel == currentLineLevel){
+        if(nextLineLevel == currentLineLevel){ //TODO: Burde jeg tilføje et check for om denne har nogle underlinjer?
             System.out.println("Next line is on the same level!");
+            //if(getLevel(fileLines.get(nextLine+1).toString()) > currentLineLevel){
+            //    mainArray.add(fillArayHELP(fileLines, new ArrayList<ArrayList>(), nextLine+1));
+            //}
+
+            //mainArray.add(fillArayHELP(fileLines, new ArrayList<ArrayList>(), nextLine));
+
             return mainArray;
         }
 
