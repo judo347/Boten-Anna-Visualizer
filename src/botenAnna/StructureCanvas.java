@@ -42,15 +42,16 @@ public class StructureCanvas extends Canvas {
         mainNodeStructure.setCoordinates(canvasSizeHorizontal/2,verticalSpace + nodeHeight, canvasSizeHorizontal);
 
         //Get draw elements
-        ArrayList<Node> allNodes = mainNodeStructure.collectAllNodes();
+        ArrayList<Node> allNodes = new ArrayList<>();
+        allNodes.addAll(mainNodeStructure.collectAllNodes());
         allNodes.add(mainNodeStructure);
 
         //Some loop to draw all elements in nodeArray
         for(int i = 0; i < allNodes.size(); i++){
             int x = allNodes.get(i).getX();
             int y = allNodes.get(i).getY();
-            int width = allNodes.get(i).getWidth();
-            int heigth = allNodes.get(i).getHeight();
+            int width = allNodes.get(i).getGraphicalWidth();
+            int heigth = allNodes.get(i).getGraphicalHeight();
             g.drawRect(x,y,width,heigth);
             g.drawString(allNodes.get(i).getNodeName(), width/2+x, heigth/2+y);
         }

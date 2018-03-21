@@ -33,7 +33,7 @@ public class MainFrame extends JFrame {
 
         frame.add(sp);
         frame.pack();
-        frame.setSize(200, 200);
+        frame.setSize(500, 500);
         frame.setVisible(true);
 
     }

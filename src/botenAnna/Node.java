@@ -34,22 +34,22 @@ public class Node {
         return lineOrigin;
     }
 
-    public ArrayList<Node> getArrayList(){
+    public ArrayList<Node> getArrayList() {
         return children;
     }
 
-    private void setNameAndType(){
+    private void setNameAndType() {
         String nodeName = getLineOrigin().trim().split(" ")[0];
         this.nodeType = getNodeTypeFromString(nodeName);
         this.nodeName = nodeName;
     }
 
-    public NodeTypes getNodeType(){
+    public NodeTypes getNodeType() {
         return this.nodeType;
     }
 
-    private NodeTypes getNodeTypeFromString(String nodeName){
-        switch(nodeName) {
+    private NodeTypes getNodeTypeFromString(String nodeName) {
+        switch (nodeName) {
             case "Sequencer":
                 return NodeTypes.SEQUENCER;
             case "Selector":
@@ -57,17 +57,17 @@ public class Node {
             case "Inverter":
                 return NodeTypes.INVERTER;
             default:
-               if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")) {
-                   return NodeTypes.GUARD;
-               } else if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){
-                   return NodeTypes.TASK;
-               }
+                if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")) {
+                    return NodeTypes.GUARD;
+                } else if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")) {
+                    return NodeTypes.TASK;
+                }
         }
 
         return null;
     }
 
-    public void addChild(Node node){
+    public void addChild(Node node) {
         children.add(node);
     }
 
@@ -77,11 +77,11 @@ public class Node {
 
     //TODO: Can be optimized to act like the (getSize()) method
     public int getWidth() {
-        if(children.size() == 0)
+        if (children.size() == 0)
             return 1;
-        else{
+        else {
             int sum = 0;
-            for(int i = 0; i < children.size(); i++){
+            for (int i = 0; i < children.size(); i++) {
                 sum += children.get(i).getWidth();
             }
 
@@ -89,15 +89,15 @@ public class Node {
         }
     }
 
-    public int getHeight(){
-        if(children.size() == 0)
+    public int getHeight() {
+        if (children.size() == 0)
             return 1;
-        else{
+        else {
             int largestBranchHeight = 0;
             int brachHeight;
-            for(int i = 0; i < children.size(); i++){
+            for (int i = 0; i < children.size(); i++) {
                 brachHeight = children.get(i).getHeight();
-                if(brachHeight > largestBranchHeight)
+                if (brachHeight > largestBranchHeight)
                     largestBranchHeight = brachHeight;
             }
 
@@ -105,7 +105,7 @@ public class Node {
         }
     }
 
-    public boolean isCoordinatesSet(){
+    public boolean isCoordinatesSet() {
         return x != 0 && y != 0;
     }
 
@@ -138,35 +138,40 @@ public class Node {
         return horizontalSpace;
     }
 
-    public void setCoordinates(int startX, int startY, int ownMaxWidth){
+    public void setCoordinates(int startX, int startY, int ownMaxWidth) {
 
-        this.setXandY(startX,startY);
+        this.setXandY(startX, startY);
 
-        if(this.children.size() > 0){
-            for(int i = 0; i < children.size(); i++){
-                int nextMaxWidth = ownMaxWidth/children.size();
-                int x = (nextMaxWidth/2) * (i+1); //TODO: top left calculation
+        if (this.children.size() > 0) {
+            for (int i = 0; i < children.size(); i++) {
+                int nextMaxWidth = ownMaxWidth / children.size();
+                int x = (nextMaxWidth / 2) * (i + 1); //TODO: top left calculation
                 int y = (startY + verticalSpace + height);
 
-                this.children.get(i).setCoordinates(x,y,nextMaxWidth);
+                this.children.get(i).setCoordinates(x, y, nextMaxWidth);
             }
         }
     }
 
-    public ArrayList<Node> collectAllNodes(){
+    public ArrayList<Node> collectAllNodes() {
+        ArrayList<Node> returnArray = new ArrayList<>();
 
-        if(children.size() == 0)
-            return null;
-        else{
-            ArrayList<Node> returnArray = new ArrayList<>();
-
-            for(int i = 0; i < children.size(); i++){
-                if(children.get(i).collectAllNodes() == null){
-                    returnArray.add(children.get(i));
-                }
-            }
-
+        if (children.size() == 0) {
+            returnArray.add(new Node(this.lineOrigin));
             return returnArray;
         }
+
+        // Array med alle childs
+        for (int i = 0; i < children.size(); i++) {
+            ArrayList<Node> child = children.get(i).collectAllNodes();
+            returnArray.addAll(child);
+        }
+
+
+
+/*                for(int i = 0; i < children.size(); i++){
+                    returnArray.add(children.get(i));
+                }*/
+        return returnArray;
     }
 }
