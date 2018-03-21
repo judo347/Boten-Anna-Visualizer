@@ -43,8 +43,12 @@ public class StructureCanvas extends Canvas {
 
         //Get draw elements
         ArrayList<Node> allNodes = new ArrayList<>();
-        allNodes.addAll(mainNodeStructure.collectAllNodes());
         allNodes.add(mainNodeStructure);
+        allNodes.addAll(mainNodeStructure.collectAllNodes());
+
+        for (int i = 0; i < allNodes.size(); i++) {
+            System.out.println(allNodes.get(i).getNodeName());
+        }
 
         //Some loop to draw all elements in nodeArray
         for(int i = 0; i < allNodes.size(); i++){
