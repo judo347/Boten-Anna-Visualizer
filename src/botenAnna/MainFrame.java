@@ -21,20 +21,19 @@ public class MainFrame extends JFrame {
         //Get node structure from the choosen file
         Node mainNodeStructure = fa.getStructureArrey(fc.getSelectedFile());
 
-        /*
+
         //Get canvas of structure
         StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
-
         //Scroll pane
         ScrollPane sp = new ScrollPane();
+        sp.setPreferredSize(new Dimension(500,500));
         sp.add(canvas);
-        */
 
         //addComponents(frame.getContentPane());
 
-        //frame.add(sp);
+        frame.add(sp);
         frame.pack();
-        frame.setSize(600, 600);
+        frame.setSize(200, 200);
         frame.setVisible(true);
 
     }

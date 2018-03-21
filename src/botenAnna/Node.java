@@ -97,4 +97,51 @@ public class Node {
             return largestBranchHeight + 1;
         }
     }
+
+    public ArrayList<GraphicalNode> getGriphicalNodeArray(){
+
+        ArrayList<GraphicalNode> nodeArray = new ArrayList<>();
+
+        if(children.size() == 0){
+            nodeArray.add(new GraphicalNode(this.nodeName));
+            return nodeArray;
+        }else{
+
+            //Collect all child GraphicalNodes
+            for(int i = 0; i < children.size(); i++){
+                ArrayList<GraphicalNode> child = children.get(i).getGriphicalNodeArray();
+                nodeArray.addAll(child);
+            }
+
+            //Create array of notAssignedNotes
+            ArrayList<GraphicalNode> notAssignedNodes = new ArrayList<>();
+            for(int i = 0; i < nodeArray.size(); i++){
+                if(!nodeArray.get(i).isCoordinatesSet())
+                    notAssignedNodes.add(nodeArray.get(i));
+            }
+
+            int myWidthNumberOfChilden = this.getWidth();
+            int howMuchICanFill = myWidthNumberOfChilden * notAssignedNodes.get(0).getWidth() + (notAssignedNodes.size() - 1 * notAssignedNodes.get(0).getHorizontalSpace());
+            int widthBoxPlusWS = notAssignedNodes.get(0).getWidth() + notAssignedNodes.get(0).getHorizontalSpace();
+
+            //Set coordinates of notAssignedNodes
+            for(int i = 0; i < notAssignedNodes.size(); i++){
+                int x = (i *widthBoxPlusWS);
+                int y = (this.getHeight() * notAssignedNodes.get(i).getHeight()) +
+                        (notAssignedNodes.get(i).getVerticalSpace() * this.getHeight());
+
+                notAssignedNodes.get(i).setXandY(x, y);
+            }
+
+            //Merge the notAssignedNodes back
+            nodeArray.addAll(notAssignedNodes);
+
+            //Add my self
+            nodeArray.add(new GraphicalNode(this.nodeName));
+
+            return nodeArray;
+        }
+
+
+    }
 }
