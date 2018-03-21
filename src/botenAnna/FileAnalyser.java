@@ -15,13 +15,13 @@ public class FileAnalyser {
 
         //Analyse fileLines and fill main array
         Node mainNode = new Node(fileLines.get(0).toString());
-        System.out.println("CALLING RECURSION!"); //TODO: TEMP
+        //System.out.println("CALLING RECURSION!"); //TODO: TEMP
         fillArray(fileLines, mainNode);
-        System.out.println("RECURSION CALL ENDED!"); //TODO: TEMP
+        //System.out.println("RECURSION CALL ENDED!"); //TODO: TEMP
 
         //Display the array
         //displayMainArray(mainArray); //TODO: TEMP
-        displayMainNode(mainNode); //TODO: TEMP
+        //displayMainNode(mainNode); //TODO: TEMP
 
 
         /*

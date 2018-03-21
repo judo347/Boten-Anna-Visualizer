@@ -7,17 +7,13 @@ public class MainFrame extends JFrame {
 
     final JFileChooser fc = new JFileChooser();
 
-    final int nodeWidth = 10;
-    final int nodeHeight = 5;
-    final int verticalSpace = 2;
-    final int horizontalSpace = 2;
-
     public MainFrame() throws HeadlessException {
 
         //Create the window
         JFrame frame = new JFrame("Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //TODO: EXCEPTIONS
         //Display filechooser
         int fcReturn = fc.showDialog(frame, null);
         FileAnalyser fa = new FileAnalyser();
@@ -25,24 +21,27 @@ public class MainFrame extends JFrame {
         //Get node structure from the choosen file
         Node mainNodeStructure = fa.getStructureArrey(fc.getSelectedFile());
 
-        //Get width and height of tree
-        int numberOfHorizontalElements = mainNodeStructure.getWidth();
-        int numberOfVerticalElements = mainNodeStructure.getHeight();
+        /*
+        //Get canvas of structure
+        StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
 
-        System.out.println("Height of tree: " + numberOfVerticalElements);
-        System.out.println("Width of tree: " + numberOfHorizontalElements);
+        //Scroll pane
+        ScrollPane sp = new ScrollPane();
+        sp.add(canvas);
+        */
 
-        //Calculate size of window //TODO: Currently without any extra space. So sizeFrame = sizeTree
-        int windowSizeHorizontal = numberOfHorizontalElements * nodeWidth + (numberOfHorizontalElements - 1) * horizontalSpace;
-        int windowSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
+        //addComponents(frame.getContentPane());
 
+        //frame.add(sp);
         frame.pack();
-        frame.setSize(windowSizeHorizontal, windowSizeVertical);
+        frame.setSize(600, 600);
         frame.setVisible(true);
 
     }
 
     public void addComponents(final Container pane) {
+
+
 
 
     }
