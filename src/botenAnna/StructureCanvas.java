@@ -4,9 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
 
 public class StructureCanvas extends Canvas {
 
@@ -27,14 +25,14 @@ public class StructureCanvas extends Canvas {
         this.mainNodeStructure = mainNodeStructure;
 
         //Get width and height of a node and the vertical and horizontal space
-        this.nodeWidth = mainNodeStructure.getNodeWidth();
-        this.nodeHeight = mainNodeStructure.getNodeHeight();
+        this.nodeWidth = mainNodeStructure.getGraphicalWidth();
+        this.nodeHeight = mainNodeStructure.getGraphicalHeight();
         this.verticalSpace = mainNodeStructure.getVerticalSpace();
         this.horizontalSpace =mainNodeStructure.getHorizontalSpace();
 
         //Get number of vertical and horizontal elements
-        this.numberOfHorizontalElements = mainNodeStructure.getWidth();
-        this.numberOfVerticalElements = mainNodeStructure.getHeight();
+        this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTree();
+        this.numberOfVerticalElements = mainNodeStructure.getHeightOfTree();
 
         //Calculate size of window //TODO: Currently without any extra space. So sizeFrame = sizeTree
         this.canvasSizeHorizontal = numberOfHorizontalElements * (nodeWidth + horizontalSpace);
@@ -64,8 +62,8 @@ public class StructureCanvas extends Canvas {
     }
 
     private void drawElement(Graphics g, Node node){
-        int x = node.getX();
-        int y = node.getY();
+        int x = node.getXCoordinate();
+        int y = node.getYCoordinate();
         int width = node.getGraphicalWidth();
         int height = node.getGraphicalHeight();
         Node.NodeTypes type = node.getNodeType();

@@ -65,7 +65,6 @@ public class FileAnalyser {
 
         //Reached end of lines in fileLines
         if(fileLines.size() <= nextLine){
-            System.out.println("We ran out of lines!");
             return mainArray;
         }
 
