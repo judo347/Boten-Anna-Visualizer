@@ -9,12 +9,13 @@ public class Node {
     private String lineOrigin;
     private NodeTypes nodeType;
 
-    final private int width = 150;
-    final private int height = 60;
-    private int x = 0;
-    private int y = 0;
+    final private int width = 140;
+    final private int height = 40;
     final private int verticalSpace = 10;
     final private int horizontalSpace = 150;
+
+    private int x = 0;
+    private int y = 0;
 
     public Node(String lineOrigin) {
         children = new ArrayList<Node>();
