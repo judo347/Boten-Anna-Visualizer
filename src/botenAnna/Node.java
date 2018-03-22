@@ -9,8 +9,8 @@ public class Node {
     private String lineOrigin;
     private NodeTypes nodeType;
 
-    final private int width = 150;
-    final private int height = 60;
+    final private int nodeWidth = 150;
+    final private int nodeHeight = 60;
     final private int verticalSpace = 50;
     final private int horizontalSpace = 50;
 
@@ -119,11 +119,11 @@ public class Node {
     }
 
     public int getGraphicalWidth() {
-        return width;
+        return nodeWidth;
     }
 
     public int getGraphicalHeight() {
-        return height;
+        return nodeHeight;
     }
 
     public void setXandY(int x, int y) {
@@ -148,7 +148,7 @@ public class Node {
             int currentX = 0;
             for (int i = 0; i < children.size(); i++) {
                 int nextMaxWidth = parentWidth / children.size();
-                int childWidth = children.get(i).getWidth() * (width + horizontalSpace);
+                int childWidth = children.get(i).getWidth() * (nodeWidth + horizontalSpace);
                 if (children.size() == 1){
                     x = startX;
                 } else {
@@ -156,7 +156,7 @@ public class Node {
                     x = startX - parentWidth / 2 + childWidth / 2 + currentX;
                     currentX += childWidth;
                 }
-                int y = (startY + verticalSpace + height);
+                int y = (startY + verticalSpace + nodeHeight);
 
                 this.children.get(i).setCoordinates(x, y, childWidth);
             }
@@ -182,5 +182,13 @@ public class Node {
             returnArray.add(children.get(i));
         }
         return returnArray;
+    }
+
+    public int getNodeWidth() {
+        return nodeWidth;
+    }
+
+    public int getNodeHeight() {
+        return nodeHeight;
     }
 }

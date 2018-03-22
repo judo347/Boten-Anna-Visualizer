@@ -1,1 +1,0 @@
-# Boten-Anna-Visualizer

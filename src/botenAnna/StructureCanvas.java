@@ -10,15 +10,14 @@ import java.util.PrimitiveIterator;
 
 public class StructureCanvas extends Canvas {
 
-    final int nodeWidth = 150;
-    final int nodeHeight = 60;
-    final int verticalSpace = 50;
-    final int horizontalSpace = 50;
+
 
     private int numberOfHorizontalElements;
     private int numberOfVerticalElements;
     private int canvasSizeHorizontal;
     private int canvasSizeVertical;
+    final int verticalSpace;
+    final int horizontalSpace;
     private int nodeWidth;
     private int nodeHeight;
 
@@ -27,13 +26,15 @@ public class StructureCanvas extends Canvas {
     public StructureCanvas(Node mainNodeStructure) {
         this.mainNodeStructure = mainNodeStructure;
 
+        //Get width and height of a node and the vertical and horizontal space
+        this.nodeWidth = mainNodeStructure.getNodeWidth();
+        this.nodeHeight = mainNodeStructure.getNodeHeight();
+        this.verticalSpace = mainNodeStructure.getVerticalSpace();
+        this.horizontalSpace =mainNodeStructure.getHorizontalSpace();
+
         //Get number of vertical and horizontal elements
         this.numberOfHorizontalElements = mainNodeStructure.getWidth();
         this.numberOfVerticalElements = mainNodeStructure.getHeight();
-
-        //Get width and height of a node
-        this.nodeHeight = 40;
-        this.nodeWidth = 140;
 
         //Calculate size of window //TODO: Currently without any extra space. So sizeFrame = sizeTree
         this.canvasSizeHorizontal = numberOfHorizontalElements * (nodeWidth + horizontalSpace);
@@ -55,10 +56,6 @@ public class StructureCanvas extends Canvas {
 
         //Assign coordinates
         mainNodeStructure.setCoordinates((canvasSizeHorizontal/2),verticalSpace + nodeHeight, canvasSizeHorizontal);
-
-        for (int i = 0; i < allNodes.size(); i++) {
-            System.out.println(allNodes.get(i).getNodeName());
-        }
 
         //Some loop to draw all elements in nodeArray
         for(int i = 0; i < allNodes.size(); i++){
