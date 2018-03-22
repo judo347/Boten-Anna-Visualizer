@@ -37,7 +37,7 @@ public class StructureCanvas extends Canvas {
         this.canvasSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
 
         //Canvas properties
-        setBackground(Color.green);
+        setBackground(Color.GRAY);
         setSize(canvasSizeHorizontal, canvasSizeVertical);
         setVisible(true);
     }
@@ -86,16 +86,16 @@ public class StructureCanvas extends Canvas {
         //Image and image background
         int imageWidth = imageSizeX - (2 * borderThickness);
         int imageHeight = imageSizeY - (2 * borderThickness);
-        g.setColor(Color.WHITE);
+        g.setColor(getTypeColor(type));
         g.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
         ((Graphics2D) g).drawImage(image, x, y, imageWidth, imageHeight, null); //Image
 
         //Text background and text
+        g.setColor(Color.WHITE);
         g.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, width - imageWidth - (3 * borderThickness), height - ( 2 * borderThickness), edgeArc, edgeArc);
         //g.fillRoundRect(x + (imageSizeX + (1 * borderThickness)), y + borderThickness, width - imageSizeX - (2 * borderThickness), height - (3 * borderThickness), edgeArc, edgeArc);
-        g.setColor(Color.BLACK);
-        //g.setColor(getTypeColor(node.getNodeType()));//TODO: this one should replace the above line
-        g.drawString(txt, x + imageSizeX + 10, y + nodeHeight/2 + 2); //TODO
+        g.setColor(Color.black);
+        g.drawString(txt, x + imageSizeX + 10, y + nodeHeight/2 + 2);
     }
 
     /** Takes a enum of a node type and returns the image corresponding to the type.
@@ -132,8 +132,14 @@ public class StructureCanvas extends Canvas {
      * @return the color of the parsed type. */
     private Color getTypeColor(Node.NodeTypes type){
 
-        //TODO: Build as the above method (getTypeImage)
+        switch (type) {
+            case SELECTOR   : return Color.YELLOW;
+            case SEQUENCER  : return Color.PINK;
+            case INVERTER   : return Color.GREEN;
+            case GUARD      : return Color.CYAN;
+            case TASK       : return Color.RED;
+        }
 
-        return null;
+        return null; //Should not get here
     }
 }
