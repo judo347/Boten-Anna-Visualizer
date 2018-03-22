@@ -2,10 +2,11 @@ package botenAnna;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class MainFrame extends JFrame {
 
-    final JFileChooser fc = new JFileChooser();
+
 
     /** This is the main function for the Behaviour tree visualizer.
      *  Call this and you will be asked to open a file.
@@ -17,13 +18,18 @@ public class MainFrame extends JFrame {
         JFrame frame = new JFrame("Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //TODO: EXCEPTIONS
-        //Display filechooser
-        int fcReturn = fc.showDialog(frame, null);
         FileAnalyser fa = new FileAnalyser();
 
+        //Display filechooser and get file
+        File file = null;
+        try{
+            file = fa.getFile(frame);
+        }catch (NoFileSelectedException e){
+            System.exit(0);
+        }
+
         //Get node structure from the chosen file
-        Node mainNodeStructure = fa.getStructureArrey(fc.getSelectedFile());
+        Node mainNodeStructure = fa.getStructureArrey(file);
 
         //Get canvas of structure
         StructureCanvas canvas = new StructureCanvas(mainNodeStructure);

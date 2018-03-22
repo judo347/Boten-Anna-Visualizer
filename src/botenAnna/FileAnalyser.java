@@ -1,11 +1,24 @@
 package botenAnna;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
 public class FileAnalyser {
 
     private int nextLine;
+
+    public File getFile(Frame frame){
+        JFileChooser fc = new JFileChooser();
+        int fcReturn;
+        fcReturn = fc.showDialog(frame, null);
+
+        if(fcReturn == 1)
+            throw new NoFileSelectedException();
+
+        return fc.getSelectedFile();
+    }
 
     /** This method opens reads a file and build the tree.
      * @param file a file with a formatted behaviour tree (usually from a filechooser)
