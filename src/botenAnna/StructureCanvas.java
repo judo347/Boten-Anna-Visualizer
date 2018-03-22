@@ -9,7 +9,7 @@ public class StructureCanvas extends Canvas {
     final int nodeWidth = 150;
     final int nodeHeight = 60;
     final int verticalSpace = 10;
-    final int horizontalSpace = 30;
+    final int horizontalSpace = 150;
 
 
 
@@ -38,13 +38,15 @@ public class StructureCanvas extends Canvas {
     }
 
     public void paint(Graphics g){
-        //Assign coordinates
-        mainNodeStructure.setCoordinates(canvasSizeHorizontal/2,verticalSpace + nodeHeight, canvasSizeHorizontal);
+
 
         //Get draw elements
         ArrayList<Node> allNodes = new ArrayList<>();
         allNodes.add(mainNodeStructure);
         allNodes.addAll(mainNodeStructure.collectAllNodes());
+
+        //Assign coordinates
+        mainNodeStructure.setCoordinates(canvasSizeHorizontal/2,verticalSpace + nodeHeight, canvasSizeHorizontal);
 
         for (int i = 0; i < allNodes.size(); i++) {
             System.out.println(allNodes.get(i).getNodeName());

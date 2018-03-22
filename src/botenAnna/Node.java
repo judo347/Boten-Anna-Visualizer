@@ -14,7 +14,7 @@ public class Node {
     private int x = 0;
     private int y = 0;
     final private int verticalSpace = 10;
-    final private int horizontalSpace = 30;
+    final private int horizontalSpace = 150;
 
     public Node(String lineOrigin) {
         children = new ArrayList<Node>();
@@ -156,10 +156,11 @@ public class Node {
     public ArrayList<Node> collectAllNodes() {
         ArrayList<Node> returnArray = new ArrayList<>();
 
+/*        // Array of all non-childs
         if (children.size() == 0) {
             returnArray.add(new Node(this.lineOrigin));
             return returnArray;
-        }
+        }*/
 
         // Array med alle childs
         for (int i = 0; i < children.size(); i++) {
@@ -167,11 +168,9 @@ public class Node {
             returnArray.addAll(child);
         }
 
-
-
-/*                for(int i = 0; i < children.size(); i++){
-                    returnArray.add(children.get(i));
-                }*/
+        for(int i = 0; i < children.size(); i++) {
+            returnArray.add(children.get(i));
+        }
         return returnArray;
     }
 }
