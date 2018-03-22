@@ -15,7 +15,7 @@ public class Node {
 
     // Assigning variables used for drawing the Behaviour Tree
     final private int nodeWidth = 150;
-    final private int nodeHeight = 60;
+    final private int nodeHeight = 40;
     final private int verticalSpace = 50;
     final private int horizontalSpace = 50;
 

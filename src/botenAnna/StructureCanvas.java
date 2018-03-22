@@ -60,6 +60,9 @@ public class StructureCanvas extends Canvas {
         }
     }
 
+    /** This method draws a node.
+     * @param g a graphical element.
+     * @param node the node to be drawn. */
     private void drawElement(Graphics g, Node node){
         int x = node.getXCoordinate();
         int y = node.getYCoordinate();
@@ -72,20 +75,27 @@ public class StructureCanvas extends Canvas {
         Graphics2D g2d = (Graphics2D) g;
 
         int borderThickness = 2;
+        int edgeArc = 10;
+        int imageSizeX = height, imageSizeY = height;
 
-        //  | IMAGE | text       |
-        //g.fillRoundRect(300, 300, width, height, 10, 10);
-        //g.fillRoundRect(500, 300, width, height, 10, 10);
-
+        //  | IMAGE | text       | //TODO used variable calculating from one to the next
+        //Background box
         g.setColor(Color.BLACK);
-        g.fillRoundRect(x, y, width, height, 10, 10); //Overall node
+        g.fillRoundRect(x, y, width, height, edgeArc, edgeArc);
+
+        //Image and image background
+        int imageWidth = imageSizeX - (2 * borderThickness);
+        int imageHeight = imageSizeY - (2 * borderThickness);
         g.setColor(Color.WHITE);
-        g.fillRoundRect(x + borderThickness,y + borderThickness,40 - (2 * borderThickness),40 - (2 * borderThickness),10,10); //Left small box
-        ((Graphics2D) g).drawImage(image, x, y, null); //Image
-        g.drawImage(image,x + borderThickness, y + borderThickness, 40 - (2 * borderThickness), 40 - (2 * borderThickness), null);
-        g.fillRoundRect(x + 40 + borderThickness, y + borderThickness, width - 40 - (borderThickness * 3), height - (2 * borderThickness), 10, 10); //Seconds box
+        g.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
+        ((Graphics2D) g).drawImage(image, x, y, imageWidth, imageHeight, null); //Image
+
+        //Text background and text
+        g.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, width - imageWidth - (3 * borderThickness), height - ( 2 * borderThickness), edgeArc, edgeArc);
+        //g.fillRoundRect(x + (imageSizeX + (1 * borderThickness)), y + borderThickness, width - imageSizeX - (2 * borderThickness), height - (3 * borderThickness), edgeArc, edgeArc);
         g.setColor(Color.BLACK);
-        g.drawString(txt, x + 40 + 5, y + nodeHeight/2 + 2);
+        //g.setColor(getTypeColor(node.getNodeType()));//TODO: this one should replace the above line
+        g.drawString(txt, x + imageSizeX + 10, y + nodeHeight/2 + 2); //TODO
     }
 
     /** Takes a enum of a node type and returns the image corresponding to the type.
@@ -115,5 +125,15 @@ public class StructureCanvas extends Canvas {
         }
 
         return image;
+    }
+
+    /** Takes an enum of a node type and returns the corresponding color.
+     * @param type enum of a node type.
+     * @return the color of the parsed type. */
+    private Color getTypeColor(Node.NodeTypes type){
+
+        //TODO: Build as the above method (getTypeImage)
+
+        return null;
     }
 }
