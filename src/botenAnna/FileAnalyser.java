@@ -75,7 +75,6 @@ public class FileAnalyser {
         //Next lvl is one lower
         if(nextLineLevel > currentLineLevel){
             do{
-                System.out.println("Next line is lower!");
                 mainArray.addChild(fillArayHELP(fileLines, new Node(fileLines.get(nextLine).toString()), nextLine));
 
                 if(fileLines.size() <= nextLine) {
@@ -88,17 +87,14 @@ public class FileAnalyser {
 
         //Next line is on same level
         if(nextLineLevel == currentLineLevel){
-            System.out.println("Next line is on the same level!");
             return mainArray;
         }
 
         //Next line is one level above
         if(nextLineLevel < currentLineLevel){
-            System.out.println("Next line is above!");
             return mainArray;
         }
 
-        System.out.println("SHOULD NOT GET HERE, END OF fillArray");
         return mainArray;
     }
 
