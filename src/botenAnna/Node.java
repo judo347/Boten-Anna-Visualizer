@@ -25,7 +25,7 @@ public class Node {
 
     // Constructor
     public Node(String lineOrigin) {
-        children = new ArrayList<Node>();
+        children = new ArrayList<>();
         this.lineOrigin = lineOrigin;
         setNameAndType();
     }
@@ -78,16 +78,14 @@ public class Node {
     public ArrayList<Node> collectAllNodes() {
         ArrayList<Node> returnArray = new ArrayList<>();
 
-        // This loop adds all child nodes to the array by calling them recursive.
-        for (int i = 0; i < children.size(); i++) {
-            ArrayList<Node> child = children.get(i).collectAllNodes();
+        // This loop adds all child nodes to the array by calling them recursively.
+        for (Node aChildren : children) {
+            ArrayList<Node> child = aChildren.collectAllNodes();
             returnArray.addAll(child);
         }
 
-        // This loop adds all parent nodes to the array.
-        for(int i = 0; i < children.size(); i++) {
-            returnArray.add(children.get(i));
-        }
+        // Add all parent nodes to the array.
+        returnArray.addAll(children);
 
         return returnArray;
     }
