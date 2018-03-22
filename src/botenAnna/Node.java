@@ -9,10 +9,10 @@ public class Node {
     private String lineOrigin;
     private NodeTypes nodeType;
 
-    final private int width = 140;
-    final private int height = 40;
-    final private int verticalSpace = 10;
-    final private int horizontalSpace = 150;
+    final private int width = 150;
+    final private int height = 60;
+    final private int verticalSpace = 50;
+    final private int horizontalSpace = 50;
 
     private int x = 0;
     private int y = 0;
@@ -139,17 +139,26 @@ public class Node {
         return horizontalSpace;
     }
 
-    public void setCoordinates(int startX, int startY, int ownMaxWidth) {
+    public void setCoordinates(int startX, int startY, int parentWidth) {
 
         this.setXandY(startX, startY);
+        int x;
 
         if (this.children.size() > 0) {
+            int currentX = 0;
             for (int i = 0; i < children.size(); i++) {
-                int nextMaxWidth = ownMaxWidth / children.size();
-                int x = (nextMaxWidth / 2) * (i + 1); //TODO: top left calculation
+                int nextMaxWidth = parentWidth / children.size();
+                int childWidth = children.get(i).getWidth() * (width + horizontalSpace);
+                if (children.size() == 1){
+                    x = startX;
+                } else {
+/*                    x = ((nextMaxWidth * (i + 1)) / 2);<*/
+                    x = startX - parentWidth / 2 + childWidth / 2 + currentX;
+                    currentX += childWidth;
+                }
                 int y = (startY + verticalSpace + height);
 
-                this.children.get(i).setCoordinates(x, y, nextMaxWidth);
+                this.children.get(i).setCoordinates(x, y, childWidth);
             }
         }
     }

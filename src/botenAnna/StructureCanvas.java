@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.PrimitiveIterator;
 
 public class StructureCanvas extends Canvas {
-    final int verticalSpace = 10;
-    final int horizontalSpace = 150;
 
-
+    final int nodeWidth = 150;
+    final int nodeHeight = 60;
+    final int verticalSpace = 50;
+    final int horizontalSpace = 50;
 
     private int numberOfHorizontalElements;
     private int numberOfVerticalElements;
@@ -35,7 +36,7 @@ public class StructureCanvas extends Canvas {
         this.nodeWidth = 140;
 
         //Calculate size of window //TODO: Currently without any extra space. So sizeFrame = sizeTree
-        this.canvasSizeHorizontal = numberOfHorizontalElements * nodeWidth + (numberOfHorizontalElements - 1) * horizontalSpace;
+        this.canvasSizeHorizontal = numberOfHorizontalElements * (nodeWidth + horizontalSpace);
         this.canvasSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
 
         //Canvas properties
@@ -53,7 +54,7 @@ public class StructureCanvas extends Canvas {
         allNodes.addAll(mainNodeStructure.collectAllNodes());
 
         //Assign coordinates
-        mainNodeStructure.setCoordinates(canvasSizeHorizontal/2,verticalSpace + nodeHeight, canvasSizeHorizontal);
+        mainNodeStructure.setCoordinates((canvasSizeHorizontal/2),verticalSpace + nodeHeight, canvasSizeHorizontal);
 
         for (int i = 0; i < allNodes.size(); i++) {
             System.out.println(allNodes.get(i).getNodeName());
