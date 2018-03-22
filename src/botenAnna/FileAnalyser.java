@@ -66,8 +66,8 @@ public class FileAnalyser {
 
         //Reached end of lines in fileLines CHECK
         if(fileLines.size() <= nextLine){
-            System.out.println("We ran out of lines!");
             return node;
+
         }
 
         int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
