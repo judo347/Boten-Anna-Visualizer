@@ -1,2 +1,7 @@
 
 *.xml
+*.class
+*.class
+*.iml
+out/production/Boten-Anna-Visualizer/botenAnna/data
+out/production/Boten-Anna-Visualizer/botenAnna/FileAnalyser.class
