@@ -128,6 +128,49 @@ public class Node {
         return null;
     }
 
+    /** Used to get the number of elements in this nodes tree.
+     * @return number of nodes in this nodes tree. (counting this one)*/
+    private int getSizeOfTree() {
+        return 1 + children.stream().mapToInt(c -> c.getSizeOfTree()).sum();
+    }
+
+    /** Used to get the number of elements on the widest level.
+     * @return number of elements on the widest level. */
+    public int getWidthOfTree() {
+        if (children.size() == 0)
+            return 1;
+        else {
+            int sum = 0;
+            for (int i = 0; i < children.size(); i++) {
+                sum += children.get(i).getWidthOfTree();
+            }
+
+            return sum;
+        }
+    }
+
+    /** Used to get the number of level in tree.
+     * @return number of levels in the tree. */
+    public int getHeightOfTree() {
+        if (children.size() == 0)
+            return 1;
+        else {
+            int largestBranchHeight = 0;
+            int brachHeight;
+            for (int i = 0; i < children.size(); i++) {
+                brachHeight = children.get(i).getHeightOfTree();
+                if (brachHeight > largestBranchHeight)
+                    largestBranchHeight = brachHeight;
+            }
+
+            return largestBranchHeight + 1;
+        }
+    }
+
+    public void addChild(Node node) {
+        children.add(node);
+    }
+
     public String getNodeName() {
         return nodeName;
     }
@@ -162,52 +205,5 @@ public class Node {
 
     public int getHorizontalSpace() {
         return horizontalSpace;
-    }
-
-    // TODO: Mikkel kommentar
-    private int getSizeOfTree() {
-        return 1 + children.stream().mapToInt(c -> c.getSizeOfTree()).sum();
-    }
-
-    //TODO: Can be optimized to act like the (getSize()) method
-    //TODO: Mikkel - Er ikke sikker på hvordan den fungerer. Mangler kommentar
-    public int getWidthOfTree() {
-        if (children.size() == 0)
-            return 1;
-        else {
-            int sum = 0;
-            for (int i = 0; i < children.size(); i++) {
-                sum += children.get(i).getWidthOfTree();
-            }
-
-            return sum;
-        }
-    }
-
-    //TODO: Mikkel - Er ikke sikker på hvordan den fungerer. Mangler kommentar
-    public int getHeightOfTree() {
-        if (children.size() == 0)
-            return 1;
-        else {
-            int largestBranchHeight = 0;
-            int brachHeight;
-            for (int i = 0; i < children.size(); i++) {
-                brachHeight = children.get(i).getHeightOfTree();
-                if (brachHeight > largestBranchHeight)
-                    largestBranchHeight = brachHeight;
-            }
-
-            return largestBranchHeight + 1;
-        }
-    }
-
-    // TODO: Mikkel - Bliver denne stadig brugt?
-    public void addChild(Node node) {
-        children.add(node);
-    }
-
-    // TODO: Mikkel - bliver denne stadig brugt?
-    public ArrayList<Node> getArrayList() {
-        return children;
     }
 }

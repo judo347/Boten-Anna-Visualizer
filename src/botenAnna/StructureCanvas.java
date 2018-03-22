@@ -89,15 +89,14 @@ public class StructureCanvas extends Canvas {
         g.drawString(txt, x + 40 + 5, y + nodeHeight/2 + 2);
     }
 
+    /** Takes a enum of a node type and returns the image corresponding to the type.
+     * @param type enum of a node type
+     * @return the image of the parsed type. */
     private Image getTypeImage(Node.NodeTypes type){
 
         Image image = null;
-        try {
-            image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Guard.png"));
-        } catch (IOException e) {
 
-        }
-
+        //Load the image corresponding to the type of the enum
         try{
             switch (type){
                 case SELECTOR   : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Selector.png"));
