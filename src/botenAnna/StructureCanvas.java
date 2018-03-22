@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class StructureCanvas extends Canvas {
 
-
-
     private int numberOfHorizontalElements;
     private int numberOfVerticalElements;
     private int canvasSizeHorizontal;
@@ -34,7 +32,7 @@ public class StructureCanvas extends Canvas {
         this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTree();
         this.numberOfVerticalElements = mainNodeStructure.getHeightOfTree();
 
-        //Calculate size of window //TODO: Currently without any extra space. So sizeFrame = sizeTree
+        //Calculate size of window
         this.canvasSizeHorizontal = numberOfHorizontalElements * (nodeWidth + horizontalSpace);
         this.canvasSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
 
@@ -46,16 +44,17 @@ public class StructureCanvas extends Canvas {
 
     public void paint(Graphics g){
 
-
-        //Get draw elements
+        // Find and add all Nodes which are going to be drawn
         ArrayList<Node> allNodes = new ArrayList<>();
-        allNodes.add(mainNodeStructure);
-        allNodes.addAll(mainNodeStructure.collectAllNodes());
+        allNodes.add(mainNodeStructure); // Adding itself to the array first
+        allNodes.addAll(mainNodeStructure.collectAllNodes()); // Adding all other nodes to the array
 
-        //Assign coordinates
-        mainNodeStructure.setCoordinates((canvasSizeHorizontal/2),verticalSpace + nodeHeight, canvasSizeHorizontal);
+        // Assign coordinates for nodes using initial coordinates of the root node
+        int initialXCoordinate = canvasSizeHorizontal / 2;
+        int initialYCoordinate = verticalSpace + nodeHeight;
+        mainNodeStructure.setCoordinates(initialXCoordinate , initialYCoordinate , canvasSizeHorizontal);
 
-        //Some loop to draw all elements in nodeArray
+        // Draw all nodes
         for(int i = 0; i < allNodes.size(); i++){
             drawElement(g, allNodes.get(i));
         }
