@@ -4,9 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
 
 public class StructureCanvas extends Canvas {
 

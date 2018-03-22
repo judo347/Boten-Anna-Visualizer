@@ -7,104 +7,34 @@ public class FileAnalyser {
 
     private int nextLine;
 
-    /** Main method to call. */
+    /** This method opens reads a file and build the tree.
+     * @param file a file with a formatted behaviour tree (usually from a filechooser)
+     * @return the root node of the tree. */
     public Node getStructureArrey(File file){
 
-        //Get array containing lines from file
+        //Create an arraylist of the lines in the file
         ArrayList<String> fileLines = loadFile(file);
 
         //Analyse fileLines and fill main array
         Node mainNode = new Node(fileLines.get(0).toString());
-        //System.out.println("CALLING RECURSION!"); //TODO: TEMP
         fillArray(fileLines, mainNode);
-        //System.out.println("RECURSION CALL ENDED!"); //TODO: TEMP
-
-        //Display the array
-        //displayMainArray(mainArray); //TODO: TEMP
-        //displayMainNode(mainNode); //TODO: TEMP
-
-
-        /*
-        //TODO: TEMP TEST
-        ArrayList<ArrayList> threeOne = new ArrayList<>();
-        ArrayList<ArrayList> threeTwo = new ArrayList<>();
-
-        ArrayList<ArrayList> threeThree = new ArrayList<>();
-        ArrayList<ArrayList> threeFour = new ArrayList<>();
-
-        ArrayList<ArrayList> twoOne = new ArrayList<>();
-        twoOne.add(threeOne);
-        twoOne.add(threeTwo);
-
-        ArrayList<ArrayList> twoTwo = new ArrayList<>();
-        twoTwo.add(threeThree);
-        twoTwo.add(threeFour);
-
-        ArrayList<ArrayList> one = new ArrayList<>();
-        one.add(twoOne);
-        one.add(twoTwo);
-
-        displayMainArray(one);
-        */
 
         return mainNode;
     }
 
-    public Node fillArray(ArrayList fileLines, Node mainArray){
-
-        nextLine = 0;
-
-        return fillArayHELP(fileLines, mainArray, 0);
-    }
-
-    public Node fillArayHELP(ArrayList fileLines, Node mainArray, int currentLine){
-
-        nextLine++;
-
-        int currentLineLevel = getLevel(fileLines.get(currentLine).toString());
-
-        //Reached end of lines in fileLines
-        if(fileLines.size() <= nextLine){
-            System.out.println("We ran out of lines!");
-            return mainArray;
-        }
-
-        int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
-
-
-        //Next lvl is one lower
-        if(nextLineLevel > currentLineLevel){
-            do{
-                mainArray.addChild(fillArayHELP(fileLines, new Node(fileLines.get(nextLine).toString()), nextLine));
-
-                if(fileLines.size() <= nextLine) {
-                    return mainArray;
-                }
-
-                nextLineLevel = getLevel(fileLines.get(nextLine).toString());
-            }while (nextLineLevel > currentLineLevel);
-        }
-
-        //Next line is on same level
-        if(nextLineLevel == currentLineLevel){
-            return mainArray;
-        }
-
-        //Next line is one level above
-        if(nextLineLevel < currentLineLevel){
-            return mainArray;
-        }
-
-        return mainArray;
-    }
-
-    /** Loads all lines from file into array */
+    /** Loads all lines from a file into an arrayList of strings
+     * @param file a file
+     * @return an arrayList of strings containing all lines */
     public ArrayList<String> loadFile(File file){
 
         ArrayList<String> array = new ArrayList<>();
 
+        //Try to open file
         try (BufferedReader br = new BufferedReader(new FileReader(file))){
+
             String line;
+
+            //Read line for line and add it to the array
             while((line = br.readLine()) != null){
                 array.add(line);
             }
@@ -116,90 +46,64 @@ public class FileAnalyser {
         return array;
     }
 
-    /** Parse and ArrayList of arraylists to get their hierarchy displayed */
-    public void displayMainArray(ArrayList mainArray){
-        int currentLevel = 0;
+    /** Calls fillArrayHELP. Read that one for description. */
+    public Node fillArray(ArrayList fileLines, Node mainNode){
 
-        displayMainArrayHELP(mainArray, 0);
-
+        this.nextLine = 0;
+        return fillArayHELP(fileLines, mainNode, 0);
     }
 
-    public void displayMainArrayHELP(ArrayList<ArrayList> currentArray, int currentLevel){
+    /** Uses recursion to fill a root node with
+     *  behaviour tree structure from the given file.
+     * @param fileLines an arrayList of strings.
+     * @param node the root node of a behaviour tree.
+     * @return a root node containing the structure of the behaviour tree. */
+    public Node fillArayHELP(ArrayList fileLines, Node node, int currentLine){
 
-        currentLevel++;
+        nextLine++;
 
-        for(int i = 0; i < currentLevel; i++){
-            System.out.print("S");
-        }
-        System.out.println();
+        int currentLineLevel = getLevel(fileLines.get(currentLine).toString());
 
-        if(currentArray.size() == 0)
-            return;
-        else{
-            for(int i = 0; i < currentArray.size(); i++){
-                displayMainArrayHELP(currentArray.get(i), currentLevel);
-            }
-        }
-
-        /*
-        if(currentArray.size() > currentLevel){
-            for(int i = 0; i < currentArray.size(); i++){
-                displayMainArrayHELP(currentArray.get(i), currentLevel);
-            }
-        }*/
-
-    }
-
-    public void displayMainNode(Node mainNode){
-        int currentLevel = 0;
-
-        displayMainNodeHELP(mainNode, 0);
-    }
-
-    public void displayMainNodeHELP(Node currentArray, int currentLevel){
-
-        currentLevel++;
-
-        System.out.println(currentArray.getNodeName());
-
-        if(currentArray.getArrayList().size() == 0){
-            return;
-        }else{
-            for(int i = 0; i < currentArray.getArrayList().size(); i++){
-                displayMainNodeHELP(currentArray.getArrayList().get(i), currentLevel);
-            }
-        }
-    }
-
-    //OLD
-
-    public ArrayList<ArrayList> readFile(File file) {
-
-        int currentLevel = 0;
-        int currentMaxLevel = 0;
-        int numberOfLevels = getNumberOfLevels(file);
-        String[] behaviourTree = new String[numberOfLevels];
-
-        ArrayList<Integer> levelElements = new ArrayList<>();
-        ArrayList<ArrayList> mainList = new ArrayList<>();
-
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line;
-            while((line = br.readLine()) != null){
-                levelElements.add(getLevel(line));
-
-            }
-        }catch (IOException e) {
-            System.out.println("Failed to open and read file:");
-            e.printStackTrace();
+        //Reached end of lines in fileLines CHECK
+        if(fileLines.size() <= nextLine){
+            System.out.println("We ran out of lines!");
+            return node;
         }
 
-        System.out.println(levelElements);
+        int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
 
-        return null;
+
+        //Next lvl is one lower
+        if(nextLineLevel > currentLineLevel){
+            do{
+                node.addChild(fillArayHELP(fileLines, new Node(fileLines.get(nextLine).toString()), nextLine));
+
+                if(fileLines.size() <= nextLine) {
+                    return node;
+                }
+
+                nextLineLevel = getLevel(fileLines.get(nextLine).toString());
+            }while (nextLineLevel > currentLineLevel);
+        }
+
+        //Next line is on same level
+        if(nextLineLevel == currentLineLevel){
+            return node;
+        }
+
+        //Next line is one level above
+        if(nextLineLevel < currentLineLevel){
+            return node;
+        }
+
+        return node;
     }
 
+    /** Counts spaces from the start in a line and returns how many tabs that equals too.
+     *  This is used to determine the level of a line. This is determined from how many tabs
+     *  there is at the start of a line.
+     * @param line a string of text.
+     * @return number of tab spaces at the start of a line. */
     public int getLevel(String line){
 
         int i = 0;
@@ -209,23 +113,5 @@ public class FileAnalyser {
         }
 
         return i/4;
-    }
-
-    public int getNumberOfLevels(File file) {
-
-        int currentMaxLevel = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line;
-            while((line = br.readLine()) != null){
-                if(getLevel(line) > currentMaxLevel)
-                    currentMaxLevel = getLevel(line);
-            }
-        }catch (IOException e) {
-            System.out.println("Failed to open and read file:");
-            e.printStackTrace();
-        }
-
-        return (currentMaxLevel /4) + 1;
     }
 }

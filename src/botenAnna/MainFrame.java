@@ -7,9 +7,13 @@ public class MainFrame extends JFrame {
 
     final JFileChooser fc = new JFileChooser();
 
-    public MainFrame() throws HeadlessException {
+    /** This is the main function for the Behaviour tree visualizer.
+     *  Call this and you will be asked to open a file.
+     *  The files content should be a formatted behaviour tree
+     *  and then this will be displayed as an image. */
+    public MainFrame() {
 
-        //Create the window
+        //Create the frame (window)
         JFrame frame = new JFrame("Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -18,30 +22,21 @@ public class MainFrame extends JFrame {
         int fcReturn = fc.showDialog(frame, null);
         FileAnalyser fa = new FileAnalyser();
 
-        //Get node structure from the choosen file
+        //Get node structure from the chosen file
         Node mainNodeStructure = fa.getStructureArrey(fc.getSelectedFile());
-
 
         //Get canvas of structure
         StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
+
         //Scroll pane
         ScrollPane sp = new ScrollPane();
-        sp.setPreferredSize(new Dimension(500,500));
         sp.add(canvas);
 
-        //addComponents(frame.getContentPane());
-
+        //Add elements to frame and make visible
         frame.add(sp);
         frame.pack();
-        frame.setSize(500, 500);
+        frame.setSize(1200, 800);
         frame.setVisible(true);
-
-    }
-
-    public void addComponents(final Container pane) {
-
-
-
 
     }
 }
