@@ -47,15 +47,15 @@ public class Node {
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
-        this.setXYCoordinates(startX, startY);
+        this.setXYCoordinates(startX-75, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
         int x;
 
         if (this.children.size() > 0) {
-            int currentX = 0; // Used to position nodes right of the previous node if on same y-coordinate.
+            int currentX = 0; // Used to position nodes to the right of previous node if on same y-coordinate.
             for (int i = 0; i < children.size(); i++) {
                 int childWidth = children.get(i).getWidthOfTree() * (nodeWidth + horizontalSpace);
                 if (children.size() == 1){
-                    // If there is no other child it will receive same x-coordinate as its parent
+                    // If there is no other children it will receive same x-coordinate as its parent
                     x = startX;
                 } else {
                     // If there are multiple children it will position them next to each other.
@@ -100,7 +100,28 @@ public class Node {
     private void setNameAndType() {
         String nodeName = getLineOrigin().trim().split(" ")[0];
         this.nodeType = getNodeTypeFromString(nodeName);
-        this.nodeName = nodeName;
+        if (isStringTaskOrGuard(nodeName) == 1){
+            this.nodeName = nodeName.replace("Task", "");
+        } else if (isStringTaskOrGuard(nodeName) == 2){
+            this.nodeName = nodeName.replace("Guard", "");
+        } else {
+            this.nodeName = nodeName;
+        }
+    }
+
+    /**
+     * Method to check whether an String is a Task or Guard or neither.
+     * @param nodeName String to be checked, in the form of a node name.
+     * @return Returns an integer between 0-2 for whether it is a Task(1), Guard(2) or neither(0).
+     */
+    private int isStringTaskOrGuard (String nodeName){
+        if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){
+            return 1;
+        } else if(nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")){
+            return 2;
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -118,9 +139,9 @@ public class Node {
             case "Inverter":
                 return NodeTypes.INVERTER;
             default:
-                if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")) {
+                if (isStringTaskOrGuard(nodeName) == 2) {
                     return NodeTypes.GUARD;
-                } else if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")) {
+                } else if (isStringTaskOrGuard(nodeName) == 1) {
                     return NodeTypes.TASK;
                 }
         }

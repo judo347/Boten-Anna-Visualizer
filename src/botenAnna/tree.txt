@@ -1,19 +1,19 @@
 Selector
-    Sequencer1
+    Sequencer
         GuardIsKickoff
-        Invert0
-            Sequencer01
+        Inverter
+            Sequencer
                 GuardHasBoost 0
                 TaskGoTowardsPoint ball_land_pos false true
         TaskDashForward
-    Sequencer2
+    Sequencer
         GuardIsMidAir
         TaskAdjustAirRotation ball_land_pos
-    Sequencer3
+    Sequencer
         GuardIsDistanceLessThan my_pos ball_pos 320
         GuardIsDoubleLessThan ang_ball 0.05 true
         TaskDashForward
-    Sequence4
+    Sequencer
         Selector
             GuardIsBallOnMyHalf
             GuardIsDistanceLessThan my_pos ball_pos 1200
