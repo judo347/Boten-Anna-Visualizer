@@ -1,12 +1,11 @@
 package botenAnna;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 
 public class MainFrame extends JFrame {
 
-
+    private StructurePanel panel;
 
     /** This is the main function for the Behaviour tree visualizer.
      *  Call this and you will be asked to open a file.
@@ -32,17 +31,18 @@ public class MainFrame extends JFrame {
         Node mainNodeStructure = fa.getStructureArrey(file);
 
         //Get canvas of structure
-        StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
+        // StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
 
-        //Scroll pane
-        ScrollPane sp = new ScrollPane();
-        sp.add(canvas);
+        // Get panel of structure
+        panel = new StructurePanel(mainNodeStructure);
+
+        //Scroll pane with drag tool
+        frame.add(new ScrollDrag(panel, panel.getCanvasSizeHorizontal(), panel.getCanvasSizeVertical()));
 
         //Add elements to frame and make visible
-        frame.add(sp);
         frame.pack();
         frame.setSize(1200, 800);
         frame.setVisible(true);
-
+        frame.setLocationRelativeTo(null);
     }
 }
