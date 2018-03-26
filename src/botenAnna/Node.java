@@ -186,6 +186,23 @@ public class Node {
         }
     }
 
+    /** Gets and returns an array containing coordinates of its children.
+     * @return an arraylist containing coordinates of its children. */
+    public ArrayList<int[]> getChildrenCoordinates(){
+        ArrayList<int[]> array = new ArrayList<>();
+        int[] coordinates;
+
+        if(children.size() == 0)
+            return array;
+        else{
+            for(int i = 0; i < children.size(); i++){
+                array.add(coordinates = new int[] {children.get(i).getXCoordinate(), children.get(i).getYCoordinate()});
+            }
+
+            return array;
+        }
+    }
+
     public void addChild(Node node) {
         children.add(node);
     }

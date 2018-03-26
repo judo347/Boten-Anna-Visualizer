@@ -30,9 +30,6 @@ public class MainFrame extends JFrame {
         //Get node structure from the chosen file
         Node mainNodeStructure = fa.getStructureArrey(file);
 
-        //Get canvas of structure
-        // StructureCanvas canvas = new StructureCanvas(mainNodeStructure);
-
         // Get panel of structure
         panel = new StructurePanel(mainNodeStructure);
 

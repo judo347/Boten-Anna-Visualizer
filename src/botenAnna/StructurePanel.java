@@ -59,6 +59,11 @@ public class StructurePanel extends JPanel {
         for(int i = 0; i < allNodes.size(); i++){
             drawElement(g, allNodes.get(i));
         }
+
+        // Draw lines between nodes
+        for(int i = 0; i < allNodes.size(); i++){
+            drawLines(g, allNodes.get(i));
+        }
     }
 
     /** This method draws a node.
@@ -97,6 +102,18 @@ public class StructurePanel extends JPanel {
         //g.fillRoundRect(x + (imageSizeX + (1 * borderThickness)), y + borderThickness, width - imageSizeX - (2 * borderThickness), height - (3 * borderThickness), edgeArc, edgeArc);
         g.setColor(Color.black);
         g.drawString(txt, x + imageSizeX + 10, y + nodeHeight/2 + 2);
+    }
+
+    /** Draws a lines between a node and its children.
+     * @param g a graphical element.
+     * @param node the node to draw lines from. */
+    private void drawLines(Graphics g, Node node){
+        ArrayList<int[]> array = node.getChildrenCoordinates();
+        int[] lineStart = new int[]{node.getXCoordinate(), node.getYCoordinate()};
+
+        for(int i = 0; i < array.size(); i++){
+            g.drawLine(lineStart[0] + nodeWidth/2, lineStart[1] + nodeHeight, array.get(i)[0] + nodeWidth/2, array.get(i)[1]);
+        }
     }
 
     /** Takes a enum of a node type and returns the image corresponding to the type.
