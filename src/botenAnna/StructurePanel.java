@@ -101,7 +101,44 @@ public class StructurePanel extends JPanel {
         g.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, width - imageWidth - (3 * borderThickness), height - ( 2 * borderThickness), edgeArc, edgeArc);
         //g.fillRoundRect(x + (imageSizeX + (1 * borderThickness)), y + borderThickness, width - imageSizeX - (2 * borderThickness), height - (3 * borderThickness), edgeArc, edgeArc);
         g.setColor(Color.black);
-        g.drawString(txt, x + imageSizeX + 10, y + nodeHeight/2 + 2);
+        drawText(g, node);
+
+    }
+
+    /** Draws the text for a node
+     * @param g a graphical element.
+     * @param node the node with the text. */
+    private void drawText(Graphics g, Node node){
+        String txt = node.getNodeName();
+        int imageSize = node.getGraphicalHeight();
+        int x = node.getXCoordinate() + imageSize + 10;
+        int y = node.getYCoordinate() + nodeHeight/2 + 2;
+
+        //Can the string be on one line
+        if(txt.length() < 13)
+            g.drawString(txt, x, y);
+        else{
+
+            //Find the last upperCase / start of a word
+            int i = 13;
+            while(!Character.isUpperCase(txt.charAt(i))){i--;}
+
+            //Cut the line into two
+            String firstLine = "";
+            String secondLine = "";
+            int j;
+
+            for(j = 0; j < i; j++){
+                firstLine = firstLine + txt.charAt(j);
+            }
+
+            for(;j < txt.length(); j++){
+                secondLine = secondLine + txt.charAt(j);
+            }
+
+            g.drawString(firstLine, x, y - 5);
+            g.drawString(secondLine, x, y + 10);
+        }
     }
 
     /** Draws a lines between a node and its children.
