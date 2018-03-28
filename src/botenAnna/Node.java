@@ -110,25 +110,6 @@ public class Node {
     }
 
     /**
-     * Method to find and collect all nodes using recursion.
-     * @return Returns an array of Nodes in which ALL nodes are stored.
-     */
-    public ArrayList<Node> collectAllNodes() {
-        ArrayList<Node> returnArray = new ArrayList<>();
-
-        // This loop adds all child nodes to the array by calling them recursively.
-        for (Node aChildren : children) {
-            ArrayList<Node> child = aChildren.collectAllNodes();
-            returnArray.addAll(child);
-        }
-
-        // Add all parent nodes to the array.
-        returnArray.addAll(children);
-
-        return returnArray;
-    }
-
-    /**
      * Sets the name of a node by trimming the lineOrigin (full line) and removing
      * unnecessary spacing and then assigning only the first element of the string.
      * Also sets the type by using the getNodeTypeFromString method with the name of a node.
@@ -221,22 +202,6 @@ public class Node {
             }
 
             return largestBranchHeight + 1;
-        }
-    }
-
-    /** Gets and returns an array containing coordinates of its children.
-     * @return an arraylist containing coordinates of its children. */
-    public ArrayList<int[]> getChildrenCoordinates(){
-        ArrayList<int[]> array = new ArrayList<>();
-
-        if(children.size() == 0)
-            return array;
-        else{
-            for(int i = 0; i < children.size(); i++){
-                array.add(new int[] {children.get(i).getXCoordinate(), children.get(i).getYCoordinate()});
-            }
-
-            return array;
         }
     }
 
