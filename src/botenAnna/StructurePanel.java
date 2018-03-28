@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class StructurePanel extends JPanel {
 
+    private static final Color BACKGROUND_COLOR = Color.LIGHT_GRAY;
+
     private int numberOfHorizontalElements;
     private int numberOfVerticalElements;
     private int canvasSizeHorizontal;
@@ -38,12 +40,13 @@ public class StructurePanel extends JPanel {
         this.canvasSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
 
         //Canvas properties
-        setBackground(Color.GRAY);
+        setBackground(BACKGROUND_COLOR);
         setSize(canvasSizeHorizontal, canvasSizeVertical);
         setVisible(true);
     }
 
     public void paint(Graphics g){
+        super.paint(g);
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
