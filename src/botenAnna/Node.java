@@ -110,25 +110,6 @@ public class Node {
     }
 
     /**
-     * Method to find and collect all nodes using recursion.
-     * @return Returns an array of Nodes in which ALL nodes are stored.
-     */
-    public ArrayList<Node> collectAllNodes() {
-        ArrayList<Node> returnArray = new ArrayList<>();
-
-        // This loop adds all child nodes to the array by calling them recursively.
-        for (Node aChildren : children) {
-            ArrayList<Node> child = aChildren.collectAllNodes();
-            returnArray.addAll(child);
-        }
-
-        // Add all parent nodes to the array.
-        returnArray.addAll(children);
-
-        return returnArray;
-    }
-
-    /**
      * Sets the name of a node by trimming the lineOrigin (full line) and removing
      * unnecessary spacing and then assigning only the first element of the string.
      * Also sets the type by using the getNodeTypeFromString method with the name of a node.
@@ -224,19 +205,47 @@ public class Node {
         }
     }
 
-    /** Gets and returns an array containing coordinates of its children.
-     * @return an arraylist containing coordinates of its children. */
-    public ArrayList<int[]> getChildrenCoordinates(){
-        ArrayList<int[]> array = new ArrayList<>();
+    /** This method draws a the node and all its children recursively.
+     * @param g2d a graphical element. */
+    public void draw(Graphics2D g2d){
 
-        if(children.size() == 0)
-            return array;
-        else{
-            for(int i = 0; i < children.size(); i++){
-                array.add(new int[] {children.get(i).getXCoordinate(), children.get(i).getYCoordinate()});
-            }
+        int borderThickness = 2;
+        int edgeArc = 10;
+        int imageSize = nodeHeight;
 
-            return array;
+        //  | IMAGE | text       | //TODO used variable calculating from one to the next
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(x, y, nodeWidth, nodeHeight, edgeArc, edgeArc);
+
+        //Image and image background
+        int imageWidth = imageSize - (2 * borderThickness);
+        int imageHeight = imageSize - (2 * borderThickness);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
+        g2d.drawImage(nodeType.getImage(), x + borderThickness, y + borderThickness, imageWidth, imageHeight, null); //Image
+
+        //Text background and text
+        g2d.setColor(Color.WHITE);
+        g2d.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, nodeWidth - imageWidth - (3 * borderThickness), nodeHeight - ( 2 * borderThickness), edgeArc, edgeArc);
+        g2d.setColor(Color.BLACK);
+        DrawHelper.drawText(g2d, x + imageSize + 10, y + nodeHeight/2 + 2, nodeName, 13);
+
+        //Lines
+        drawLines(g2d);
+
+        //Draw children - recursion
+        for (Node child : children) {
+            child.draw(g2d);
+        }
+    }
+
+    /** Draws a lines between the node and its children.
+     * @param g2d a graphical element. */
+    private void drawLines(Graphics2D g2d) {
+
+        for (Node child : children) {
+            g2d.drawLine(x + nodeWidth / 2, y + nodeHeight, child.x + child.nodeWidth / 2, child.y);
         }
     }
 
