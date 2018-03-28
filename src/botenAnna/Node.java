@@ -1,11 +1,49 @@
 package botenAnna;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Node {
 
+    public static final Color COMPOSITE_COLOR = Color.decode("#B38867");
+    public static final Color DECORATOR_COLOR = Color.decode("#FD974F");
+    public static final Color ABSOLUTE_COLOR = Color.decode("#128277");
+    public static final Color GUARD_COLOR = Color.decode("#c6d166");
+    public static final Color TASK_COLOR = Color.decode("#B2473E");
+
+
     public enum NodeTypes {
-        SELECTOR, SEQUENCER, INVERTER, GUARD, TASK
+        SELECTOR("Selector.png", COMPOSITE_COLOR),
+        SEQUENCER("Sequencer.png", COMPOSITE_COLOR),
+        INVERTER("Inverter.png", DECORATOR_COLOR),
+        GUARD("Guard.png", GUARD_COLOR),
+        TASK("Task.png", TASK_COLOR),
+        ALWAYSFAILURE("AlwaysFailure.png", DECORATOR_COLOR),
+        ALWAYSSUCCESS("AlwaysSuccess.png", DECORATOR_COLOR),
+        IFTHENELSE("IfThenElse.png", ABSOLUTE_COLOR);
+
+        private Image image;
+        private Color color;
+
+        NodeTypes(String fileName, Color color){
+            try {
+                this.image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/" + fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            this.color = color;
+        }
+
+        public Image getImage() {
+            return image;
+        }
+
+        public Color getColor() {
+            return color;
+        }
     }
 
     private ArrayList<Node> children;
@@ -98,28 +136,22 @@ public class Node {
     private void setNameAndType() {
         String nodeName = getLineOrigin().trim().split(" ")[0];
         this.nodeType = getNodeTypeFromString(nodeName);
-        if (isStringTaskOrGuard(nodeName) == 1){
+        if (isStringTask(nodeName)){
             this.nodeName = nodeName.replace("Task", "");
-        } else if (isStringTaskOrGuard(nodeName) == 2){
+        } else if (isStringGuard(nodeName)){
             this.nodeName = nodeName.replace("Guard", "");
         } else {
             this.nodeName = nodeName;
         }
     }
 
-    /**
-     * Method to check whether an String is a Task or Guard or neither.
-     * @param nodeName String to be checked, in the form of a node name.
-     * @return Returns an integer between 0-2 for whether it is a Task(1), Guard(2) or neither(0).
-     */
-    private int isStringTaskOrGuard (String nodeName){
-        if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){
-            return 1;
-        } else if(nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")){
-            return 2;
-        } else {
-            return 0;
-        }
+    private boolean isStringTask (String nodeName){
+        if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){return true;}
+        else {return false;}
+    }
+    private boolean isStringGuard (String nodeName){
+        if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")){return true;}
+        else {return false;}
     }
 
     /**
@@ -136,10 +168,16 @@ public class Node {
                 return NodeTypes.SELECTOR;
             case "Inverter":
                 return NodeTypes.INVERTER;
+            case "IfThenElse":
+                return NodeTypes.IFTHENELSE;
+            case "AlwaysSuccess":
+                return NodeTypes.ALWAYSSUCCESS;
+            case "AlwaysFailure":
+                return NodeTypes.ALWAYSFAILURE;
             default:
-                if (isStringTaskOrGuard(nodeName) == 2) {
+                if (isStringGuard(nodeName)) {
                     return NodeTypes.GUARD;
-                } else if (isStringTaskOrGuard(nodeName) == 1) {
+                } else if (isStringTask(nodeName)) {
                     return NodeTypes.TASK;
                 }
         }
