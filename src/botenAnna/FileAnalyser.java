@@ -112,19 +112,30 @@ public class FileAnalyser {
         return node;
     }
 
-    /** Counts spaces from the start in a line and returns how many tabs that equals too.
+    /** Counts spaces or tabs from the start in a line and returns how many tabs that equals too.
      *  This is used to determine the level of a line. This is determined from how many tabs
      *  there is at the start of a line.
      * @param line a string of text.
-     * @return number of tab spaces at the start of a line. */
+     * @return number of tabs at the start of a line. */
     public int getLevel(String line){
 
         int i = 0;
 
-        while(line.charAt(i) == ' '){
-            i++;
-        }
+        if(line.charAt(0) == ' '){
+            while(line.charAt(i) == ' '){
+                i++;
+            }
 
-        return i/4;
+            return i/4;
+        }else if(line.charAt(0) == '\t'){
+            while(line.charAt(i) == '\t'){
+                i++;
+            }
+
+            return i;
+        }else{
+
+            return i;
+        }
     }
 }
