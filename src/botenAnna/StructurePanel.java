@@ -65,24 +65,6 @@ public class StructurePanel extends JPanel {
         for(int i = 0; i < allNodes.size(); i++){
             allNodes.get(i).draw(g2d);
         }
-
-        // Draw lines between nodes
-        for(int i = 0; i < allNodes.size(); i++){
-            drawLines(g2d, allNodes.get(i));
-        }
-    }
-
-    /** Draws a lines between a node and its children.
-     * @param g2d a graphical element.
-     * @param node the node to draw lines from. */
-    private void drawLines(Graphics2D g2d, Node node){
-
-        ArrayList<int[]> array = node.getChildrenCoordinates();
-        int[] lineStart = new int[]{node.getXCoordinate(), node.getYCoordinate()};
-
-        for(int i = 0; i < array.size(); i++){
-            g2d.drawLine(lineStart[0] + nodeWidth/2, lineStart[1] + nodeHeight, array.get(i)[0] + nodeWidth/2, array.get(i)[1]);
-        }
     }
 
     public int getCanvasSizeHorizontal(){

@@ -258,13 +258,25 @@ public class Node {
         int imageHeight = imageSize - (2 * borderThickness);
         g2d.setColor(nodeType.getColor());
         g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
-        g2d.drawImage(nodeType.getImage(), x+2, y+2, imageWidth, imageHeight, null); //Image
+        g2d.drawImage(nodeType.getImage(), x + borderThickness, y + borderThickness, imageWidth, imageHeight, null); //Image
 
         //Text background and text
         g2d.setColor(Color.WHITE);
         g2d.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, nodeWidth - imageWidth - (3 * borderThickness), nodeHeight - ( 2 * borderThickness), edgeArc, edgeArc);
         g2d.setColor(Color.BLACK);
         DrawHelper.drawText(g2d, x + imageSize + 10, y + nodeHeight/2 + 2, nodeName, 13);
+
+        //Lines
+        drawLines(g2d);
+    }
+
+    /** Draws a lines between the node and its children.
+     * @param g2d a graphical element. */
+    private void drawLines(Graphics2D g2d) {
+
+        for (Node child : children) {
+            g2d.drawLine(x + nodeWidth / 2, y + nodeHeight, child.x + child.nodeWidth / 2, child.y);
+        }
     }
 
     public void addChild(Node node) {
