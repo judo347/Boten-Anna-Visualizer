@@ -79,7 +79,7 @@ public class StructurePanel extends JPanel {
         int height = node.getGraphicalHeight();
         Node.NodeTypes type = node.getNodeType();
         String txt = node.getNodeName();
-        Image image = getTypeImage(type);
+        Image image = type.getImage();
 
         int borderThickness = 2;
         int edgeArc = 10;
@@ -93,9 +93,9 @@ public class StructurePanel extends JPanel {
         //Image and image background
         int imageWidth = imageSizeX - (2 * borderThickness);
         int imageHeight = imageSizeY - (2 * borderThickness);
-        g2d.setColor(getTypeColor(type));
+        g2d.setColor(type.getColor());
         g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
-        g2d.drawImage(image, x, y, imageWidth, imageHeight, null); //Image
+        g2d.drawImage(image, x+2, y+2, imageWidth, imageHeight, null); //Image
 
         //Text background and text
         g2d.setColor(Color.WHITE);
@@ -116,7 +116,7 @@ public class StructurePanel extends JPanel {
         int y = node.getYCoordinate() + nodeHeight/2 + 2;
 
         //Can the string be on one line
-        if(txt.length() < 13)
+        if(txt.length() < 14)
             g2d.drawString(txt, x, y);
         else{
 
@@ -153,51 +153,6 @@ public class StructurePanel extends JPanel {
         for(int i = 0; i < array.size(); i++){
             g2d.drawLine(lineStart[0] + nodeWidth/2, lineStart[1] + nodeHeight, array.get(i)[0] + nodeWidth/2, array.get(i)[1]);
         }
-    }
-
-    /** Takes a enum of a node type and returns the image corresponding to the type.
-     * @param type enum of a node type
-     * @return the image of the parsed type. */
-    private Image getTypeImage(Node.NodeTypes type){
-
-        Image image = null;
-
-        //Load the image corresponding to the type of the enum
-        try{
-            switch (type){
-                case SELECTOR   : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Selector.png"));
-                    break;
-                case SEQUENCER  : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Sequencer.png"));
-                    break;
-                case INVERTER   : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Inverter.png"));
-                    break;
-                case GUARD      : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Guard.png"));
-                    break;
-                case TASK       : image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/Task.png"));
-                    break;
-            }
-        } catch (IOException e){
-            System.out.println("Could not load image: StructureCanvas -> getTypeImage");
-            e.printStackTrace();
-        }
-
-        return image;
-    }
-
-    /** Takes an enum of a node type and returns the corresponding color.
-     * @param type enum of a node type.
-     * @return the color of the parsed type. */
-    private Color getTypeColor(Node.NodeTypes type){
-
-        switch (type) {
-            case SELECTOR   : return Color.YELLOW;
-            case SEQUENCER  : return Color.PINK;
-            case INVERTER   : return Color.GREEN;
-            case GUARD      : return Color.CYAN;
-            case TASK       : return Color.RED;
-        }
-
-        return null; //Should not get here
     }
 
     public int getCanvasSizeHorizontal(){

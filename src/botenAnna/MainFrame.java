@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Load file and add components
+        frame.setSize(windowSizeWidth, windowSizeHeight);
         doLoadFile();
 
         //Display the window
@@ -55,6 +56,10 @@ public class MainFrame extends JFrame {
 
         frame.add(mainPanel);
 
+        //Save the current window size and pack frame
+        Dimension windowSize = frame.getSize();
+        this.windowSizeHeight = windowSize.height;
+        this.windowSizeWidth = windowSize.width;
         frame.pack();
         frame.setSize(windowSizeWidth, windowSizeHeight);
     }
