@@ -240,6 +240,33 @@ public class Node {
         }
     }
 
+    /** This method draws a the node and all its children recursively.
+     * @param g2d a graphical element. */
+    public void draw(Graphics2D g2d){
+
+        int borderThickness = 2;
+        int edgeArc = 10;
+        int imageSize = nodeHeight;
+
+        //  | IMAGE | text       | //TODO used variable calculating from one to the next
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(x, y, nodeWidth, nodeHeight, edgeArc, edgeArc);
+
+        //Image and image background
+        int imageWidth = imageSize - (2 * borderThickness);
+        int imageHeight = imageSize - (2 * borderThickness);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
+        g2d.drawImage(nodeType.getImage(), x+2, y+2, imageWidth, imageHeight, null); //Image
+
+        //Text background and text
+        g2d.setColor(Color.WHITE);
+        g2d.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, nodeWidth - imageWidth - (3 * borderThickness), nodeHeight - ( 2 * borderThickness), edgeArc, edgeArc);
+        g2d.setColor(Color.BLACK);
+        DrawHelper.drawText(g2d, x + imageSize + 10, y + nodeHeight/2 + 2, nodeName, 13);
+    }
+
     public void addChild(Node node) {
         children.add(node);
     }
