@@ -51,20 +51,13 @@ public class StructurePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Find and add all Nodes which are going to be drawn
-        ArrayList<Node> allNodes = new ArrayList<>();
-        allNodes.add(mainNodeStructure); // Adding itself to the array first
-        allNodes.addAll(mainNodeStructure.collectAllNodes()); // Adding all other nodes to the array
-
         // Assign coordinates for nodes using initial coordinates of the root node
         int initialXCoordinate = canvasSizeHorizontal / 2;
         int initialYCoordinate = verticalSpace + nodeHeight;
         mainNodeStructure.setCoordinates(initialXCoordinate , initialYCoordinate , canvasSizeHorizontal);
 
-        // Draw all nodes
-        for(int i = 0; i < allNodes.size(); i++){
-            allNodes.get(i).draw(g2d);
-        }
+        // Draw tree with recursion
+        mainNodeStructure.draw(g2d);
     }
 
     public int getCanvasSizeHorizontal(){

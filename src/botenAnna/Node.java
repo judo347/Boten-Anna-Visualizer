@@ -268,6 +268,11 @@ public class Node {
 
         //Lines
         drawLines(g2d);
+
+        //Draw children - recursion
+        for (Node child : children) {
+            child.draw(g2d);
+        }
     }
 
     /** Draws a lines between the node and its children.
