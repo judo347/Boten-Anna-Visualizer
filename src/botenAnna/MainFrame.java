@@ -3,35 +3,97 @@ package botenAnna;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
 
 public class MainFrame extends JFrame {
 
-    final JFileChooser fc = new JFileChooser();
+    private JFrame frame;
 
-    public  MainFrame() throws HeadlessException {
+    private File file = null;
+    private StructurePanel structurePanel = null;
 
-        JFrame frame = new JFrame("Visualizer");
+    int windowSizeWidth = 1200;
+    int windowSizeHeight = 800;
+
+    /** This is the main function for the Behaviour tree visualizer.
+     *  Call this and you will be asked to open a file.
+     *  The files content should be a formatted behaviour tree
+     *  and then this will be displayed as an image. */
+    public MainFrame() {
+
+        //Creating the frame (window)
+        frame = new JFrame("Visualizer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int fcReturn = fc.showDialog(frame, null);
-        FileAnalyser fa = new FileAnalyser();
+        //Load file and add components
+        frame.setSize(windowSizeWidth, windowSizeHeight);
+        doLoadFile();
 
-        try {
-            fa.readFile(fc.getSelectedFile());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        frame.pack();
-        frame.setSize(600,600);
+        //Display the window
         frame.setVisible(true);
-
+        frame.setLocationRelativeTo(null);
     }
 
-    public void addComponents(final Container pane){
+    /** Adds components/content to to the frame. */
+    private void addComponentsToPane(final Container pane){
 
+        pane.removeAll();
+
+        //Creating the topbar
+        JPanel topbar = new JPanel();
+        topbar.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JButton buttonLoad = new JButton("Load");
+        JButton buttonRefresh = new JButton("Refresh");
+        buttonLoad.addActionListener(e -> doLoadFile());
+        buttonRefresh.addActionListener(e -> doRefreshFile());
+        topbar.add(buttonLoad);
+        topbar.add(buttonRefresh);
+
+        //Creating the main panel
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(topbar);
+        mainPanel.add(new ScrollDrag(structurePanel, structurePanel.getCanvasSizeHorizontal(), structurePanel.getCanvasSizeVertical()));
+
+        frame.add(mainPanel);
+
+        //Save the current window size and pack frame
+        Dimension windowSize = frame.getSize();
+        this.windowSizeHeight = windowSize.height;
+        this.windowSizeWidth = windowSize.width;
+        frame.pack();
+        frame.setSize(windowSizeWidth, windowSizeHeight);
+    }
+
+    /** Display the filechooser and generate content for frame. */
+    private void doLoadFile(){
+
+        FileAnalyser fa = new FileAnalyser();
+
+        //Display filechooser and get file
+        try{
+            file = fa.getFile(frame);
+            Node mainNodeStructure = fa.getStructure(file);
+            structurePanel = new StructurePanel(mainNodeStructure);
+
+            //Refresh the content
+            addComponentsToPane(frame.getContentPane());
+
+        }catch (NoFileSelectedException e){
+            if(file == null)
+                System.exit(0);
+        }
+    }
+
+    /** Reload the file and structurePanel. */
+    private void doRefreshFile(){
+
+        FileAnalyser fa = new FileAnalyser();
+
+        //Load file and create structurePanel
+        Node mainNodeStructure = fa.getStructure(file);
+        structurePanel = new StructurePanel(mainNodeStructure);
+
+        //Refresh components
+        addComponentsToPane(frame.getContentPane());
     }
 }
