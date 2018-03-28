@@ -2,7 +2,6 @@ package botenAnna;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 
 public class MainFrame extends JFrame {
@@ -54,7 +53,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(topbar);
         mainPanel.add(new ScrollDrag(structurePanel, structurePanel.getCanvasSizeHorizontal(), structurePanel.getCanvasSizeVertical()));
 
-        pane.add(mainPanel);
+        frame.add(mainPanel);
 
         frame.pack();
         frame.setSize(windowSizeWidth, windowSizeHeight);
@@ -68,7 +67,7 @@ public class MainFrame extends JFrame {
         //Display filechooser and get file
         try{
             file = fa.getFile(frame);
-            Node mainNodeStructure = fa.getStructureArrey(file);
+            Node mainNodeStructure = fa.getStructure(file);
             structurePanel = new StructurePanel(mainNodeStructure);
 
             //Refresh the content
@@ -86,7 +85,7 @@ public class MainFrame extends JFrame {
         FileAnalyser fa = new FileAnalyser();
 
         //Load file and create structurePanel
-        Node mainNodeStructure = fa.getStructureArrey(file);
+        Node mainNodeStructure = fa.getStructure(file);
         structurePanel = new StructurePanel(mainNodeStructure);
 
         //Refresh components
