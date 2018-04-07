@@ -1,11 +1,7 @@
 package botenAnna;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class StructurePanel extends JPanel {
 
@@ -22,12 +18,12 @@ public class StructurePanel extends JPanel {
         this.mainNodeStructure = mainNodeStructure;
 
         //Get number of vertical and horizontal elements
-        this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTree();
-        this.numberOfVerticalElements = mainNodeStructure.getHeightOfTree();
+        this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTreeAsCount();
+        this.numberOfVerticalElements = mainNodeStructure.getHeightOfTreeAsCount();
 
         //Calculate size of window
-        this.canvasSizeHorizontal = numberOfHorizontalElements * (Node.NODE_WIDTH + Node.HORIZONTAL_SPACING);
-        this.canvasSizeVertical = numberOfVerticalElements * Node.NODE_HEIGHT + (numberOfVerticalElements - 1) * Node.VERTICAL_SPACING;
+        this.canvasSizeHorizontal = mainNodeStructure.getWidthOfTreeGraphical();
+        this.canvasSizeVertical = mainNodeStructure.getHeightOfTreeGraphical();
 
         //Canvas properties
         setBackground(BACKGROUND_COLOR);
@@ -43,11 +39,11 @@ public class StructurePanel extends JPanel {
 
         // Assign coordinates for nodes using initial coordinates of the root node
         int initialXCoordinate = canvasSizeHorizontal / 2;
-        int initialYCoordinate = Node.VERTICAL_SPACING + Node.NODE_HEIGHT;
+        int initialYCoordinate = Node.VERTICAL_SPACING / 2;
         mainNodeStructure.setCoordinates(initialXCoordinate , initialYCoordinate , canvasSizeHorizontal);
 
         // Draw tree with recursion
-        mainNodeStructure.draw(g2d);
+        mainNodeStructure.drawTree(g2d);
     }
 
     public int getCanvasSizeHorizontal(){
