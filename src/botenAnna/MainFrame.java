@@ -14,6 +14,10 @@ public class MainFrame extends JFrame {
     int windowSizeWidth = 1200;
     int windowSizeHeight = 800;
 
+    public static void main(String[] args) {
+        MainFrame window = new MainFrame();
+    }
+
     /** This is the main function for the Behaviour tree visualizer.
      *  Call this and you will be asked to open a file.
      *  The files content should be a formatted behaviour tree
