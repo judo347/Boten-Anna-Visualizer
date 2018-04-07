@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class Node {
 
-    public static final int NODE_WIDTH = 150;
-    public static final int NODE_HEIGHT = 40;
-    public static final int VERTICAL_SPACING = 50;
-    public static final int HORIZONTAL_SPACING = 50;
+    public static final int NODE_WIDTH = 120;
+    public static final int NODE_HEIGHT = 30;
+    public static final int VERTICAL_SPACING = 30;
+    public static final int HORIZONTAL_SPACING = 30;
 
     private static final int BORDER_THICKNESS = 2;
-    private static final int BORDER_ARC = 10;
-    private static final int TEXT_INDENT = 10;
+    private static final int BORDER_ARC = 8;
+    private static final int TEXT_INDENT = 4;
 
     private int x = 0;
     private int y = 0;
@@ -42,7 +42,7 @@ public class Node {
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
-        this.setXYCoordinates(startX-75, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
+        this.setXYCoordinates(startX - NODE_WIDTH / 2, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
         int x;
 
         if (this.children.size() > 0) {
@@ -182,7 +182,7 @@ public class Node {
         g2d.setColor(Color.WHITE);
         g2d.fillRoundRect(x + imageWidth + (2 * BORDER_THICKNESS), y + BORDER_THICKNESS, NODE_WIDTH - imageWidth - (3 * BORDER_THICKNESS), NODE_HEIGHT - ( 2 * BORDER_THICKNESS), BORDER_ARC, BORDER_ARC);
         g2d.setColor(Color.BLACK);
-        DrawHelper.drawText(g2d, x + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 2, nodeName, 13);
+        DrawHelper.drawText(g2d, x + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 3, nodeName, 13);
 
         //Lines
         drawLines(g2d);
