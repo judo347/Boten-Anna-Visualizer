@@ -47,10 +47,13 @@ public class MainFrame extends JFrame {
         topbar.setAlignmentX(Component.LEFT_ALIGNMENT);
         JButton buttonLoad = new JButton("Load");
         JButton buttonRefresh = new JButton("Refresh");
+        JButton buttonCollapse = new JButton("Collapse/Expand");
         buttonLoad.addActionListener(e -> doLoadFile());
         buttonRefresh.addActionListener(e -> doRefreshFile());
+        buttonCollapse.addActionListener(e -> structurePanel.toggleCollapseExpand());
         topbar.add(buttonLoad);
         topbar.add(buttonRefresh);
+        topbar.add(buttonCollapse);
 
         //Creating the main panel
         JPanel mainPanel = new JPanel();

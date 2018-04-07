@@ -31,6 +31,20 @@ public class StructurePanel extends JPanel {
         setVisible(true);
     }
 
+    public void recalcSize() {
+        //Get number of vertical and horizontal elements
+        this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTreeAsCount();
+        this.numberOfVerticalElements = mainNodeStructure.getHeightOfTreeAsCount();
+
+        //Calculate size of window
+        this.canvasSizeHorizontal = mainNodeStructure.getWidthOfTreeGraphical();
+        this.canvasSizeVertical = mainNodeStructure.getHeightOfTreeGraphical();
+
+        //Canvas properties
+        setSize(canvasSizeHorizontal, canvasSizeVertical);
+        repaint();
+    }
+
     public void paint(Graphics g){
         super.paint(g);
 
@@ -44,6 +58,11 @@ public class StructurePanel extends JPanel {
 
         // Draw tree with recursion
         mainNodeStructure.drawTree(g2d);
+    }
+
+    public void toggleCollapseExpand() {
+        mainNodeStructure.setTreeCollapsed(!mainNodeStructure.isCollapsed());
+        recalcSize();
     }
 
     public int getCanvasSizeHorizontal(){

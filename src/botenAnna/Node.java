@@ -19,7 +19,7 @@ public class Node {
     private String nodeName;
     private String lineOrigin;
     private NodeType nodeType;
-    private boolean collapsed = true;
+    private boolean collapsed = false;
 
     public Node(String lineOrigin) {
         setXYCoordinates(0, 0);
@@ -247,6 +247,18 @@ public class Node {
 
     public void addChild(Node node) {
         children.add(node);
+    }
+
+    /** Collapse or expand tree. */
+    public void setTreeCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+        for (Node child : children) {
+            child.setTreeCollapsed(collapsed);
+        }
+    }
+
+    public boolean isCollapsed() {
+        return collapsed;
     }
 
     public String getNodeName() {
