@@ -14,22 +14,22 @@ public class Node {
     private static final int BORDER_ARC = 8;
     private static final int TEXT_INDENT = 4;
 
-    private int x = 0;
-    private int y = 0;
+    private NodeBounds bounds;
     private ArrayList<Node> children;
     private String nodeName;
     private String lineOrigin;
     private NodeType nodeType;
 
     public Node(String lineOrigin) {
+        bounds = new NodeBounds(0, 0, NODE_WIDTH, NODE_HEIGHT);
         children = new ArrayList<>();
         this.lineOrigin = lineOrigin;
         setNameAndType();
     }
 
     private void setXYCoordinates(int x, int y) {
-        this.x = x;
-        this.y = y;
+        bounds.setTopX(x);
+        bounds.setTopY(y);
     }
 
     /**
@@ -42,7 +42,7 @@ public class Node {
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
-        this.setXYCoordinates(startX - NODE_WIDTH / 2, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
+        this.setXYCoordinates(startX, startY);
         int x;
 
         if (this.children.size() > 0) {
@@ -166,7 +166,9 @@ public class Node {
      * @param g2d a graphical element. */
     public void draw(Graphics2D g2d){
 
-        //  | IMAGE | text       | //TODO used variable calculating from one to the next
+        int x = bounds.getTopLeftX();
+        int y = bounds.getTopY();
+
         //Background box
         g2d.setColor(Color.BLACK);
         g2d.fillRoundRect(x, y, NODE_WIDTH, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
@@ -198,7 +200,7 @@ public class Node {
     private void drawLines(Graphics2D g2d) {
 
         for (Node child : children) {
-            g2d.drawLine(x + NODE_WIDTH / 2, y + NODE_HEIGHT, child.x + child.NODE_WIDTH / 2, child.y);
+            g2d.drawLine(bounds.getBottomX(), bounds.getBottomY(), child.bounds.getTopX(), child.bounds.getTopY());
         }
     }
 
