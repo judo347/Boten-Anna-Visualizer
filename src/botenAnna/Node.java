@@ -19,7 +19,7 @@ public class Node {
     private String nodeName;
     private String lineOrigin;
     private NodeType nodeType;
-    private boolean collapsed = false;
+    private boolean collapsed = true;
 
     public Node(String lineOrigin) {
         setXYCoordinates(0, 0);
@@ -49,7 +49,7 @@ public class Node {
         if (this.children.size() > 0) {
             int currentX = 0; // Used to position nodes to the right of previous node if on same y-coordinate.
             for (int i = 0; i < children.size(); i++) {
-                int childWidth = children.get(i).getWidthOfTreeAsCount() * (NODE_WIDTH + HORIZONTAL_SPACING);
+                int childWidth = children.get(i).getWidthOfTreeGraphical();
                 if (children.size() == 1){
                     // If there is no other children it will receive same x-coordinate as its parent
                     x = startX;
@@ -200,7 +200,19 @@ public class Node {
     }
 
     private void drawCollapsed(Graphics2D g2d) {
+        int cornerX = getTopLeftX();
+        int width = NODE_HEIGHT;
 
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(cornerX, y, width, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
+
+        //Image and image background
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
     }
 
     private void drawExpanded(Graphics2D g2d) {
@@ -227,7 +239,7 @@ public class Node {
     /** Draws a lines between the node and its children.
      * @param g2d a graphical element. */
     private void drawLines(Graphics2D g2d) {
-
+        g2d.setColor(Color.BLACK);
         for (Node child : children) {
             g2d.drawLine(x, y + NODE_HEIGHT, child.x, child.y);
         }
