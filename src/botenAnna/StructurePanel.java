@@ -15,29 +15,19 @@ public class StructurePanel extends JPanel {
     private int numberOfVerticalElements;
     private int canvasSizeHorizontal;
     private int canvasSizeVertical;
-    final int verticalSpace;
-    final int horizontalSpace;
-    private int nodeWidth;
-    private int nodeHeight;
 
     private Node mainNodeStructure;
 
     public StructurePanel(Node mainNodeStructure) {
         this.mainNodeStructure = mainNodeStructure;
 
-        //Get width and height of a node and the vertical and horizontal space
-        this.nodeWidth = mainNodeStructure.getGraphicalWidth();
-        this.nodeHeight = mainNodeStructure.getGraphicalHeight();
-        this.verticalSpace = mainNodeStructure.getVerticalSpace();
-        this.horizontalSpace =mainNodeStructure.getHorizontalSpace();
-
         //Get number of vertical and horizontal elements
         this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTree();
         this.numberOfVerticalElements = mainNodeStructure.getHeightOfTree();
 
         //Calculate size of window
-        this.canvasSizeHorizontal = numberOfHorizontalElements * (nodeWidth + horizontalSpace);
-        this.canvasSizeVertical = numberOfVerticalElements * nodeHeight + (numberOfVerticalElements - 1) * verticalSpace;
+        this.canvasSizeHorizontal = numberOfHorizontalElements * (Node.NODE_WIDTH + Node.HORIZONTAL_SPACING);
+        this.canvasSizeVertical = numberOfVerticalElements * Node.NODE_HEIGHT + (numberOfVerticalElements - 1) * Node.VERTICAL_SPACING;
 
         //Canvas properties
         setBackground(BACKGROUND_COLOR);
@@ -53,7 +43,7 @@ public class StructurePanel extends JPanel {
 
         // Assign coordinates for nodes using initial coordinates of the root node
         int initialXCoordinate = canvasSizeHorizontal / 2;
-        int initialYCoordinate = verticalSpace + nodeHeight;
+        int initialYCoordinate = Node.VERTICAL_SPACING + Node.NODE_HEIGHT;
         mainNodeStructure.setCoordinates(initialXCoordinate , initialYCoordinate , canvasSizeHorizontal);
 
         // Draw tree with recursion

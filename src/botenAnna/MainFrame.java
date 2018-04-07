@@ -11,8 +11,8 @@ public class MainFrame extends JFrame {
     private File file = null;
     private StructurePanel structurePanel = null;
 
-    int windowSizeWidth = 1200;
-    int windowSizeHeight = 800;
+    public static final int WINDOW_INITIAL_WIDTH = 1200;
+    public static final int WINDOW_INITIAL_HEIGHT = 800;
 
     public static void main(String[] args) {
         MainFrame window = new MainFrame();
@@ -29,7 +29,7 @@ public class MainFrame extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Load file and add components
-        frame.setSize(windowSizeWidth, windowSizeHeight);
+        frame.setSize(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT);
         doLoadFile();
 
         //Display the window
@@ -62,10 +62,8 @@ public class MainFrame extends JFrame {
 
         //Save the current window size and pack frame
         Dimension windowSize = frame.getSize();
-        this.windowSizeHeight = windowSize.height;
-        this.windowSizeWidth = windowSize.width;
         frame.pack();
-        frame.setSize(windowSizeWidth, windowSizeHeight);
+        frame.setSize(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT);
     }
 
     /** Display the filechooser and generate content for frame. */

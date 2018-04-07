@@ -1,74 +1,31 @@
 package botenAnna;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Node {
 
-    public static final Color COMPOSITE_COLOR = Color.decode("#B38867");
-    public static final Color DECORATOR_COLOR = Color.decode("#FD974F");
-    public static final Color ABSOLUTE_COLOR = Color.decode("#128277");
-    public static final Color GUARD_COLOR = Color.decode("#c6d166");
-    public static final Color TASK_COLOR = Color.decode("#B2473E");
+    public static final int NODE_WIDTH = 150;
+    public static final int NODE_HEIGHT = 40;
+    public static final int VERTICAL_SPACING = 50;
+    public static final int HORIZONTAL_SPACING = 50;
 
+    private static final int BORDER_THICKNESS = 2;
+    private static final int BORDER_ARC = 10;
+    private static final int TEXT_INDENT = 10;
 
-    public enum NodeTypes {
-        SELECTOR("Selector.png", COMPOSITE_COLOR),
-        SEQUENCER("Sequencer.png", COMPOSITE_COLOR),
-        INVERTER("Inverter.png", DECORATOR_COLOR),
-        GUARD("Guard.png", GUARD_COLOR),
-        TASK("Task.png", TASK_COLOR),
-        ALWAYSFAILURE("AlwaysFailure.png", DECORATOR_COLOR),
-        ALWAYSSUCCESS("AlwaysSuccess.png", DECORATOR_COLOR),
-        IFTHENELSE("IfThenElse.png", ABSOLUTE_COLOR);
-
-        private Image image;
-        private Color color;
-
-        NodeTypes(String fileName, Color color){
-            try {
-                this.image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/" + fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.color = color;
-        }
-
-        public Image getImage() {
-            return image;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-    }
-
+    private int x = 0;
+    private int y = 0;
     private ArrayList<Node> children;
     private String nodeName;
     private String lineOrigin;
-    private NodeTypes nodeType;
+    private NodeType nodeType;
 
-    // Assigning variables used for drawing the Behaviour Tree
-    final private int nodeWidth = 150;
-    final private int nodeHeight = 40;
-    final private int verticalSpace = 50;
-    final private int horizontalSpace = 50;
-
-    // Assigning default x,y position-values.
-    private int x = 0;
-    private int y = 0;
-
-    // Constructor
     public Node(String lineOrigin) {
         children = new ArrayList<>();
         this.lineOrigin = lineOrigin;
         setNameAndType();
     }
-
-    // Methods
 
     private void setXYCoordinates(int x, int y) {
         this.x = x;
@@ -91,7 +48,7 @@ public class Node {
         if (this.children.size() > 0) {
             int currentX = 0; // Used to position nodes to the right of previous node if on same y-coordinate.
             for (int i = 0; i < children.size(); i++) {
-                int childWidth = children.get(i).getWidthOfTree() * (nodeWidth + horizontalSpace);
+                int childWidth = children.get(i).getWidthOfTree() * (NODE_WIDTH + HORIZONTAL_SPACING);
                 if (children.size() == 1){
                     // If there is no other children it will receive same x-coordinate as its parent
                     x = startX;
@@ -101,7 +58,7 @@ public class Node {
                     currentX += childWidth;
                 }
                 // The y-coordinate is the same for all nodes.
-                int y = (startY + verticalSpace + nodeHeight);
+                int y = (startY + VERTICAL_SPACING + NODE_HEIGHT);
 
                 // By using recursion we can do this for all nodes.
                 this.children.get(i).setCoordinates(x, y, childWidth);
@@ -141,25 +98,25 @@ public class Node {
      * @param nodeName String which contains the nodeName.
      * @return Returns NodeType of a given string.
      */
-    private NodeTypes getNodeTypeFromString(String nodeName) {
+    private NodeType getNodeTypeFromString(String nodeName) {
         switch (nodeName) {
             case "Sequencer":
-                return NodeTypes.SEQUENCER;
+                return NodeType.SEQUENCER;
             case "Selector":
-                return NodeTypes.SELECTOR;
+                return NodeType.SELECTOR;
             case "Inverter":
-                return NodeTypes.INVERTER;
+                return NodeType.INVERTER;
             case "IfThenElse":
-                return NodeTypes.IFTHENELSE;
+                return NodeType.IF_THEN_ELSE;
             case "AlwaysSuccess":
-                return NodeTypes.ALWAYSSUCCESS;
+                return NodeType.ALWAYS_SUCCESS;
             case "AlwaysFailure":
-                return NodeTypes.ALWAYSFAILURE;
+                return NodeType.ALWAYS_FAILURE;
             default:
                 if (isStringGuard(nodeName)) {
-                    return NodeTypes.GUARD;
+                    return NodeType.GUARD;
                 } else if (isStringTask(nodeName)) {
-                    return NodeTypes.TASK;
+                    return NodeType.TASK;
                 }
         }
 
@@ -209,27 +166,23 @@ public class Node {
      * @param g2d a graphical element. */
     public void draw(Graphics2D g2d){
 
-        int borderThickness = 2;
-        int edgeArc = 10;
-        int imageSize = nodeHeight;
-
         //  | IMAGE | text       | //TODO used variable calculating from one to the next
         //Background box
         g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(x, y, nodeWidth, nodeHeight, edgeArc, edgeArc);
+        g2d.fillRoundRect(x, y, NODE_WIDTH, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
 
         //Image and image background
-        int imageWidth = imageSize - (2 * borderThickness);
-        int imageHeight = imageSize - (2 * borderThickness);
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
         g2d.setColor(nodeType.getColor());
-        g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
-        g2d.drawImage(nodeType.getImage(), x + borderThickness, y + borderThickness, imageWidth, imageHeight, null); //Image
+        g2d.fillRoundRect(x + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), x + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
 
         //Text background and text
         g2d.setColor(Color.WHITE);
-        g2d.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, nodeWidth - imageWidth - (3 * borderThickness), nodeHeight - ( 2 * borderThickness), edgeArc, edgeArc);
+        g2d.fillRoundRect(x + imageWidth + (2 * BORDER_THICKNESS), y + BORDER_THICKNESS, NODE_WIDTH - imageWidth - (3 * BORDER_THICKNESS), NODE_HEIGHT - ( 2 * BORDER_THICKNESS), BORDER_ARC, BORDER_ARC);
         g2d.setColor(Color.BLACK);
-        DrawHelper.drawText(g2d, x + imageSize + 10, y + nodeHeight/2 + 2, nodeName, 13);
+        DrawHelper.drawText(g2d, x + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 2, nodeName, 13);
 
         //Lines
         drawLines(g2d);
@@ -245,7 +198,7 @@ public class Node {
     private void drawLines(Graphics2D g2d) {
 
         for (Node child : children) {
-            g2d.drawLine(x + nodeWidth / 2, y + nodeHeight, child.x + child.nodeWidth / 2, child.y);
+            g2d.drawLine(x + NODE_WIDTH / 2, y + NODE_HEIGHT, child.x + child.NODE_WIDTH / 2, child.y);
         }
     }
 
@@ -261,31 +214,7 @@ public class Node {
         return lineOrigin;
     }
 
-    public NodeTypes getNodeType() {
+    public NodeType getNodeType() {
         return this.nodeType;
-    }
-
-    public int getGraphicalWidth() {
-        return nodeWidth;
-    }
-
-    public int getGraphicalHeight() {
-        return nodeHeight;
-    }
-
-    public int getXCoordinate() {
-        return x;
-    }
-
-    public int getYCoordinate() {
-        return y;
-    }
-
-    public int getVerticalSpace() {
-        return verticalSpace;
-    }
-
-    public int getHorizontalSpace() {
-        return horizontalSpace;
     }
 }
