@@ -6,13 +6,13 @@ import java.io.File;
 
 public class MainFrame extends JFrame {
 
-    private JFrame frame;
+    private final JFrame frame;
 
     private File file = null;
     private StructurePanel structurePanel = null;
 
-    public static final int WINDOW_INITIAL_WIDTH = 1200;
-    public static final int WINDOW_INITIAL_HEIGHT = 800;
+    private static final int WINDOW_INITIAL_WIDTH = 1200;
+    private static final int WINDOW_INITIAL_HEIGHT = 800;
 
     public static void main(String[] args) {
         MainFrame window = new MainFrame();
@@ -42,20 +42,20 @@ public class MainFrame extends JFrame {
 
         pane.removeAll();
 
-        //Creating the topbar
-        JPanel topbar = new JPanel();
-        topbar.setAlignmentX(Component.LEFT_ALIGNMENT);
+        //Creating the top bar
+        JPanel topBar = new JPanel();
+        topBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         JButton buttonLoad = new JButton("Load");
         JButton buttonRefresh = new JButton("Refresh");
         buttonLoad.addActionListener(e -> doLoadFile());
         buttonRefresh.addActionListener(e -> doRefreshFile());
-        topbar.add(buttonLoad);
-        topbar.add(buttonRefresh);
+        topBar.add(buttonLoad);
+        topBar.add(buttonRefresh);
 
         //Creating the main panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(topbar);
+        mainPanel.add(topBar);
         mainPanel.add(new ScrollDrag(structurePanel, structurePanel.getCanvasSizeHorizontal(), structurePanel.getCanvasSizeVertical()));
 
         frame.add(mainPanel);
@@ -66,12 +66,12 @@ public class MainFrame extends JFrame {
         frame.setSize(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT);
     }
 
-    /** Display the filechooser and generate content for frame. */
+    /** Display the fileChooser and generate content for frame. */
     private void doLoadFile(){
 
         FileAnalyser fa = new FileAnalyser();
 
-        //Display filechooser and get file
+        //Display fileChooser and get file
         try{
             file = fa.getFile(frame);
             Node mainNodeStructure = fa.getStructure(file);

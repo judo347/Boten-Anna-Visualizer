@@ -84,12 +84,11 @@ public class Node {
     }
 
     private boolean isStringTask (String nodeName){
-        if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){return true;}
-        else {return false;}
+        return (nodeName.length() >= 4 && nodeName.substring(0,4).equals("Task"));
     }
+
     private boolean isStringGuard (String nodeName){
-        if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")){return true;}
-        else {return false;}
+        return (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard"));
     }
 
     /**
@@ -136,8 +135,9 @@ public class Node {
             return 1;
         else {
             int sum = 0;
-            for (int i = 0; i < children.size(); i++) {
-                sum += children.get(i).getWidthOfTree();
+
+            for (Node child : children) {
+                sum += child.getWidthOfTree();
             }
 
             return sum;
@@ -151,11 +151,12 @@ public class Node {
             return 1;
         else {
             int largestBranchHeight = 0;
-            int brachHeight;
-            for (int i = 0; i < children.size(); i++) {
-                brachHeight = children.get(i).getHeightOfTree();
-                if (brachHeight > largestBranchHeight)
-                    largestBranchHeight = brachHeight;
+            int branchHeight;
+
+            for (Node child : children) {
+                branchHeight = child.getWidthOfTree();
+                if (branchHeight > largestBranchHeight)
+                    largestBranchHeight = branchHeight;
             }
 
             return largestBranchHeight + 1;

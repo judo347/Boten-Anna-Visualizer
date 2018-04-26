@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class ScrollDrag extends JPanel {
 
-    private int sizeW, sizeY;
+    private final int sizeW, sizeY;
 
     /**
      * This method adds a scroll panel to the window and the feature to drag using the mouse.
