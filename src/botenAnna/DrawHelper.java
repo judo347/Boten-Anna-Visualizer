@@ -23,7 +23,7 @@ public class DrawHelper {
             String secondLine = text.substring(i, text.length());
 
             g2d.drawString(firstLine, x, centerY - 5);
-            g2d.drawString(secondLine, x, centerY + 10);
+            g2d.drawString(secondLine, x, centerY + 8);
         }
     }
 }

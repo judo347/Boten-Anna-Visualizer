@@ -20,15 +20,15 @@ public class FileAnalyser {
     }
 
     /** This method opens reads a file and build the tree.
-     * @param file a file with a formatted behaviour tree (usually from a filechooser)
+     * @param file a file with a formatted behaviour tree (usually from a fileChooser)
      * @return the root node of the tree. */
     public Node getStructure(File file){
 
-        //Create an arraylist of the lines in the file
+        //Create an array list of the lines in the file
         ArrayList<String> fileLines = loadFile(file);
 
         //Analyse fileLines and fill main array
-        Node mainNode = new Node(fileLines.get(0).toString());
+        Node mainNode = new Node(fileLines.get(0));
         fillArray(fileLines, mainNode);
 
         return mainNode;
@@ -37,7 +37,7 @@ public class FileAnalyser {
     /** Loads all lines from a file into an arrayList of strings
      * @param file a file
      * @return an arrayList of strings containing all lines */
-    public ArrayList<String> loadFile(File file){
+    private ArrayList<String> loadFile(File file){
 
         ArrayList<String> array = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class FileAnalyser {
     }
 
     /** Calls fillArrayHELP. Read that one for description. */
-    public Node fillArray(ArrayList fileLines, Node mainNode){
+    private Node fillArray(ArrayList fileLines, Node mainNode){
 
         this.nextLine = 0;
         return fillArrayHELP(fileLines, mainNode, 0);
@@ -70,7 +70,7 @@ public class FileAnalyser {
      * @param fileLines an arrayList of strings.
      * @param node the root node of a behaviour tree.
      * @return a root node containing the structure of the behaviour tree. */
-    public Node fillArrayHELP(ArrayList fileLines, Node node, int currentLine){
+    private Node fillArrayHELP(ArrayList fileLines, Node node, int currentLine){
 
         nextLine++;
 
@@ -116,7 +116,7 @@ public class FileAnalyser {
      *  there is at the start of a line.
      * @param line a string of text.
      * @return number of tabs at the start of a line. */
-    public int getLevel(String line){
+    private int getLevel(String line){
 
         int i = 0;
 

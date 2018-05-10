@@ -1,74 +1,32 @@
 package botenAnna;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Node {
 
-    public static final Color COMPOSITE_COLOR = Color.decode("#B38867");
-    public static final Color DECORATOR_COLOR = Color.decode("#FD974F");
-    public static final Color ABSOLUTE_COLOR = Color.decode("#128277");
-    public static final Color GUARD_COLOR = Color.decode("#c6d166");
-    public static final Color TASK_COLOR = Color.decode("#B2473E");
+    public static final int VERTICAL_SPACING = 30;
+    public static final int HORIZONTAL_SPACING = 30;
 
+    private static final int NODE_WIDTH = 120;
+    private static final int NODE_HEIGHT = 30;
+    private static final int BORDER_THICKNESS = 2;
+    private static final int BORDER_ARC = 8;
+    private static final int TEXT_INDENT = 4;
 
-    public enum NodeTypes {
-        SELECTOR("Selector.png", COMPOSITE_COLOR),
-        SEQUENCER("Sequencer.png", COMPOSITE_COLOR),
-        INVERTER("Inverter.png", DECORATOR_COLOR),
-        GUARD("Guard.png", GUARD_COLOR),
-        TASK("Task.png", TASK_COLOR),
-        ALWAYSFAILURE("AlwaysFailure.png", DECORATOR_COLOR),
-        ALWAYSSUCCESS("AlwaysSuccess.png", DECORATOR_COLOR),
-        IFTHENELSE("IfThenElse.png", ABSOLUTE_COLOR);
-
-        private Image image;
-        private Color color;
-
-        NodeTypes(String fileName, Color color){
-            try {
-                this.image = ImageIO.read(new File("out/production/Boten-Anna-Visualizer/botenAnna/images/" + fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.color = color;
-        }
-
-        public Image getImage() {
-            return image;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-    }
-
+    private int x, y;
     private ArrayList<Node> children;
     private String nodeName;
     private String lineOrigin;
-    private NodeTypes nodeType;
+    private NodeType nodeType;
+    private boolean collapsed = false;
 
-    // Assigning variables used for drawing the Behaviour Tree
-    final private int nodeWidth = 150;
-    final private int nodeHeight = 40;
-    final private int verticalSpace = 50;
-    final private int horizontalSpace = 50;
-
-    // Assigning default x,y position-values.
-    private int x = 0;
-    private int y = 0;
-
-    // Constructor
     public Node(String lineOrigin) {
+        setXYCoordinates(0, 0);
         children = new ArrayList<>();
         this.lineOrigin = lineOrigin;
         setNameAndType();
     }
-
-    // Methods
 
     private void setXYCoordinates(int x, int y) {
         this.x = x;
@@ -85,13 +43,13 @@ public class Node {
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
-        this.setXYCoordinates(startX-75, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
+        this.setXYCoordinates(startX, startY);
         int x;
 
         if (this.children.size() > 0) {
             int currentX = 0; // Used to position nodes to the right of previous node if on same y-coordinate.
             for (int i = 0; i < children.size(); i++) {
-                int childWidth = children.get(i).getWidthOfTree() * (nodeWidth + horizontalSpace);
+                int childWidth = children.get(i).getWidthOfTreeGraphical();
                 if (children.size() == 1){
                     // If there is no other children it will receive same x-coordinate as its parent
                     x = startX;
@@ -101,7 +59,7 @@ public class Node {
                     currentX += childWidth;
                 }
                 // The y-coordinate is the same for all nodes.
-                int y = (startY + verticalSpace + nodeHeight);
+                int y = (startY + VERTICAL_SPACING + NODE_HEIGHT);
 
                 // By using recursion we can do this for all nodes.
                 this.children.get(i).setCoordinates(x, y, childWidth);
@@ -121,18 +79,23 @@ public class Node {
             this.nodeName = nodeName.replace("Task", "");
         } else if (isStringGuard(nodeName)){
             this.nodeName = nodeName.replace("Guard", "");
+        } else if (isStringSubtree(nodeName)){
+            this.nodeName = lineOrigin.replace("Subtree ", "");
         } else {
             this.nodeName = nodeName;
         }
     }
 
     private boolean isStringTask (String nodeName){
-        if (nodeName.length() >= 4 && nodeName.substring(0, 4).equals("Task")){return true;}
-        else {return false;}
+        return (nodeName.length() >= 4 && nodeName.substring(0,4).equals("Task"));
     }
+
     private boolean isStringGuard (String nodeName){
-        if (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard")){return true;}
-        else {return false;}
+        return (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard"));
+    }
+
+    private boolean isStringSubtree (String nodeName){
+        return (nodeName.length() >= 7 && nodeName.substring(0, 7).equals("Subtree"));
     }
 
     /**
@@ -141,25 +104,27 @@ public class Node {
      * @param nodeName String which contains the nodeName.
      * @return Returns NodeType of a given string.
      */
-    private NodeTypes getNodeTypeFromString(String nodeName) {
+    private NodeType getNodeTypeFromString(String nodeName) {
         switch (nodeName) {
             case "Sequencer":
-                return NodeTypes.SEQUENCER;
+                return NodeType.SEQUENCER;
             case "Selector":
-                return NodeTypes.SELECTOR;
+                return NodeType.SELECTOR;
             case "Inverter":
-                return NodeTypes.INVERTER;
+                return NodeType.INVERTER;
             case "IfThenElse":
-                return NodeTypes.IFTHENELSE;
+                return NodeType.IF_THEN_ELSE;
             case "AlwaysSuccess":
-                return NodeTypes.ALWAYSSUCCESS;
+                return NodeType.ALWAYS_SUCCESS;
             case "AlwaysFailure":
-                return NodeTypes.ALWAYSFAILURE;
+                return NodeType.ALWAYS_FAILURE;
             default:
                 if (isStringGuard(nodeName)) {
-                    return NodeTypes.GUARD;
+                    return NodeType.GUARD;
                 } else if (isStringTask(nodeName)) {
-                    return NodeTypes.TASK;
+                    return NodeType.TASK;
+                } else if (isStringSubtree(nodeName)){
+                    return NodeType.SUBTREE;
                 }
         }
 
@@ -174,29 +139,40 @@ public class Node {
 
     /** Used to get the number of elements on the widest level.
      * @return number of elements on the widest level. */
-    public int getWidthOfTree() {
+    public int getWidthOfTreeAsCount() {
         if (children.size() == 0)
             return 1;
         else {
             int sum = 0;
+
             for (int i = 0; i < children.size(); i++) {
-                sum += children.get(i).getWidthOfTree();
+                sum += children.get(i).getWidthOfTreeAsCount();
             }
 
             return sum;
         }
     }
 
-    /** Used to get the number of level in tree.
+    /** @return the width of this node's tree in pixels. This includes spacing */
+    public int getWidthOfTreeGraphical() {
+        if (children.size() == 0) {
+            return getWidth() + HORIZONTAL_SPACING;
+        } else {
+            return children.stream().mapToInt(Node::getWidthOfTreeGraphical).sum();
+        }
+    }
+
+    /** Used to get the number of levels in tree.
      * @return number of levels in the tree. */
-    public int getHeightOfTree() {
+    public int getHeightOfTreeAsCount() {
         if (children.size() == 0)
             return 1;
         else {
             int largestBranchHeight = 0;
+
             int brachHeight;
             for (int i = 0; i < children.size(); i++) {
-                brachHeight = children.get(i).getHeightOfTree();
+                brachHeight = children.get(i).getHeightOfTreeAsCount();
                 if (brachHeight > largestBranchHeight)
                     largestBranchHeight = brachHeight;
             }
@@ -205,52 +181,93 @@ public class Node {
         }
     }
 
+    /** @return the height of this node's tree in pixels. This includes spacing */
+    public int getHeightOfTreeGraphical() {
+        if (children.size() == 0) {
+            return getHeight() + VERTICAL_SPACING;
+        } else {
+            return children.stream().mapToInt(Node::getHeightOfTreeGraphical).sum();
+        }
+    }
+
     /** This method draws a the node and all its children recursively.
      * @param g2d a graphical element. */
-    public void draw(Graphics2D g2d){
-
-        int borderThickness = 2;
-        int edgeArc = 10;
-        int imageSize = nodeHeight;
-
-        //  | IMAGE | text       | //TODO used variable calculating from one to the next
-        //Background box
-        g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(x, y, nodeWidth, nodeHeight, edgeArc, edgeArc);
-
-        //Image and image background
-        int imageWidth = imageSize - (2 * borderThickness);
-        int imageHeight = imageSize - (2 * borderThickness);
-        g2d.setColor(nodeType.getColor());
-        g2d.fillRoundRect(x + borderThickness, y + borderThickness, imageWidth, imageHeight, edgeArc, edgeArc);
-        g2d.drawImage(nodeType.getImage(), x + borderThickness, y + borderThickness, imageWidth, imageHeight, null); //Image
-
-        //Text background and text
-        g2d.setColor(Color.WHITE);
-        g2d.fillRoundRect(x + imageWidth + (2 * borderThickness), y + borderThickness, nodeWidth - imageWidth - (3 * borderThickness), nodeHeight - ( 2 * borderThickness), edgeArc, edgeArc);
-        g2d.setColor(Color.BLACK);
-        DrawHelper.drawText(g2d, x + imageSize + 10, y + nodeHeight/2 + 2, nodeName, 13);
+    public void drawTree(Graphics2D g2d) {
+        if (collapsed) {
+            drawCollapsed(g2d);
+        } else {
+            drawExpanded(g2d);
+        }
 
         //Lines
         drawLines(g2d);
 
         //Draw children - recursion
         for (Node child : children) {
-            child.draw(g2d);
+            child.drawTree(g2d);
         }
+    }
+
+    private void drawCollapsed(Graphics2D g2d) {
+        int cornerX = getTopLeftX();
+        int width = NODE_HEIGHT;
+
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(cornerX, y, width, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
+
+        //Image and image background
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
+    }
+
+    private void drawExpanded(Graphics2D g2d) {
+        int cornerX = getTopLeftX();
+
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(cornerX, y, NODE_WIDTH, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
+
+        //Image and image background
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
+
+        //Text background and text
+        g2d.setColor(Color.WHITE);
+        g2d.fillRoundRect(cornerX + imageWidth + (2 * BORDER_THICKNESS), y + BORDER_THICKNESS, NODE_WIDTH - imageWidth - (3 * BORDER_THICKNESS), NODE_HEIGHT - ( 2 * BORDER_THICKNESS), BORDER_ARC, BORDER_ARC);
+        g2d.setColor(Color.BLACK);
+        DrawHelper.drawText(g2d, cornerX + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 3, nodeName, 13);
     }
 
     /** Draws a lines between the node and its children.
      * @param g2d a graphical element. */
     private void drawLines(Graphics2D g2d) {
-
+        g2d.setColor(Color.BLACK);
         for (Node child : children) {
-            g2d.drawLine(x + nodeWidth / 2, y + nodeHeight, child.x + child.nodeWidth / 2, child.y);
+            g2d.drawLine(x, y + NODE_HEIGHT, child.x, child.y);
         }
     }
 
     public void addChild(Node node) {
         children.add(node);
+    }
+
+    /** Collapse or expand tree. */
+    public void setTreeCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+        for (Node child : children) {
+            child.setTreeCollapsed(collapsed);
+        }
+    }
+
+    public boolean isCollapsed() {
+        return collapsed;
     }
 
     public String getNodeName() {
@@ -261,31 +278,19 @@ public class Node {
         return lineOrigin;
     }
 
-    public NodeTypes getNodeType() {
+    public NodeType getNodeType() {
         return this.nodeType;
     }
 
-    public int getGraphicalWidth() {
-        return nodeWidth;
+    public int getTopLeftX() {
+        return x - getWidth() / 2;
     }
 
-    public int getGraphicalHeight() {
-        return nodeHeight;
+    public int getWidth() {
+        return collapsed ? NODE_HEIGHT : NODE_WIDTH;
     }
 
-    public int getXCoordinate() {
-        return x;
-    }
-
-    public int getYCoordinate() {
-        return y;
-    }
-
-    public int getVerticalSpace() {
-        return verticalSpace;
-    }
-
-    public int getHorizontalSpace() {
-        return horizontalSpace;
+    public int getHeight() {
+        return NODE_HEIGHT;
     }
 }
