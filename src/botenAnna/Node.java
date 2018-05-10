@@ -5,23 +5,24 @@ import java.util.ArrayList;
 
 public class Node {
 
-    public static final int NODE_WIDTH = 120;
-    public static final int NODE_HEIGHT = 30;
     public static final int VERTICAL_SPACING = 30;
     public static final int HORIZONTAL_SPACING = 30;
 
+    private static final int NODE_WIDTH = 120;
+    private static final int NODE_HEIGHT = 30;
     private static final int BORDER_THICKNESS = 2;
     private static final int BORDER_ARC = 8;
     private static final int TEXT_INDENT = 4;
 
-    private int x = 0;
-    private int y = 0;
+    private int x, y;
     private ArrayList<Node> children;
     private String nodeName;
     private String lineOrigin;
     private NodeType nodeType;
+    private boolean collapsed = false;
 
     public Node(String lineOrigin) {
+        setXYCoordinates(0, 0);
         children = new ArrayList<>();
         this.lineOrigin = lineOrigin;
         setNameAndType();
@@ -42,13 +43,13 @@ public class Node {
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
-        this.setXYCoordinates(startX - NODE_WIDTH / 2, startY); // TODO: Temporary fix to fit all nodes. Moving whole tree by 75 pixels.
+        this.setXYCoordinates(startX, startY);
         int x;
 
         if (this.children.size() > 0) {
             int currentX = 0; // Used to position nodes to the right of previous node if on same y-coordinate.
             for (int i = 0; i < children.size(); i++) {
-                int childWidth = children.get(i).getWidthOfTree() * (NODE_WIDTH + HORIZONTAL_SPACING);
+                int childWidth = children.get(i).getWidthOfTreeGraphical();
                 if (children.size() == 1){
                     // If there is no other children it will receive same x-coordinate as its parent
                     x = startX;
@@ -138,81 +139,135 @@ public class Node {
 
     /** Used to get the number of elements on the widest level.
      * @return number of elements on the widest level. */
-    public int getWidthOfTree() {
+    public int getWidthOfTreeAsCount() {
         if (children.size() == 0)
             return 1;
         else {
             int sum = 0;
 
-            for (Node child : children) {
-                sum += child.getWidthOfTree();
+            for (int i = 0; i < children.size(); i++) {
+                sum += children.get(i).getWidthOfTreeAsCount();
             }
 
             return sum;
         }
     }
 
-    /** Used to get the number of level in tree.
+    /** @return the width of this node's tree in pixels. This includes spacing */
+    public int getWidthOfTreeGraphical() {
+        if (children.size() == 0) {
+            return getWidth() + HORIZONTAL_SPACING;
+        } else {
+            return children.stream().mapToInt(Node::getWidthOfTreeGraphical).sum();
+        }
+    }
+
+    /** Used to get the number of levels in tree.
      * @return number of levels in the tree. */
-    public int getHeightOfTree() {
+    public int getHeightOfTreeAsCount() {
         if (children.size() == 0)
             return 1;
         else {
             int largestBranchHeight = 0;
-            int branchHeight;
 
-            for (Node child : children) {
-                branchHeight = child.getWidthOfTree();
-                if (branchHeight > largestBranchHeight)
-                    largestBranchHeight = branchHeight;
+            int brachHeight;
+            for (int i = 0; i < children.size(); i++) {
+                brachHeight = children.get(i).getHeightOfTreeAsCount();
+                if (brachHeight > largestBranchHeight)
+                    largestBranchHeight = brachHeight;
             }
 
             return largestBranchHeight + 1;
         }
     }
 
+    /** @return the height of this node's tree in pixels. This includes spacing */
+    public int getHeightOfTreeGraphical() {
+        if (children.size() == 0) {
+            return getHeight() + VERTICAL_SPACING;
+        } else {
+            return children.stream().mapToInt(Node::getHeightOfTreeGraphical).sum();
+        }
+    }
+
     /** This method draws a the node and all its children recursively.
      * @param g2d a graphical element. */
-    public void draw(Graphics2D g2d){
-
-        //  | IMAGE | text       | //TODO used variable calculating from one to the next
-        //Background box
-        g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(x, y, NODE_WIDTH, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
-
-        //Image and image background
-        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
-        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
-        g2d.setColor(nodeType.getColor());
-        g2d.fillRoundRect(x + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
-        g2d.drawImage(nodeType.getImage(), x + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
-
-        //Text background and text
-        g2d.setColor(Color.WHITE);
-        g2d.fillRoundRect(x + imageWidth + (2 * BORDER_THICKNESS), y + BORDER_THICKNESS, NODE_WIDTH - imageWidth - (3 * BORDER_THICKNESS), NODE_HEIGHT - ( 2 * BORDER_THICKNESS), BORDER_ARC, BORDER_ARC);
-        g2d.setColor(Color.BLACK);
-        DrawHelper.drawText(g2d, x + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 3, nodeName, 13);
+    public void drawTree(Graphics2D g2d) {
+        if (collapsed) {
+            drawCollapsed(g2d);
+        } else {
+            drawExpanded(g2d);
+        }
 
         //Lines
         drawLines(g2d);
 
         //Draw children - recursion
         for (Node child : children) {
-            child.draw(g2d);
+            child.drawTree(g2d);
         }
+    }
+
+    private void drawCollapsed(Graphics2D g2d) {
+        int cornerX = getTopLeftX();
+        int width = NODE_HEIGHT;
+
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(cornerX, y, width, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
+
+        //Image and image background
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
+    }
+
+    private void drawExpanded(Graphics2D g2d) {
+        int cornerX = getTopLeftX();
+
+        //Background box
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(cornerX, y, NODE_WIDTH, NODE_HEIGHT, BORDER_ARC, BORDER_ARC);
+
+        //Image and image background
+        int imageWidth = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        int imageHeight = NODE_HEIGHT - (2 * BORDER_THICKNESS);
+        g2d.setColor(nodeType.getColor());
+        g2d.fillRoundRect(cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, BORDER_ARC, BORDER_ARC);
+        g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
+
+        //Text background and text
+        g2d.setColor(Color.WHITE);
+        g2d.fillRoundRect(cornerX + imageWidth + (2 * BORDER_THICKNESS), y + BORDER_THICKNESS, NODE_WIDTH - imageWidth - (3 * BORDER_THICKNESS), NODE_HEIGHT - ( 2 * BORDER_THICKNESS), BORDER_ARC, BORDER_ARC);
+        g2d.setColor(Color.BLACK);
+        DrawHelper.drawText(g2d, cornerX + imageWidth + 3 * BORDER_THICKNESS + TEXT_INDENT, y + NODE_HEIGHT /2 + 3, nodeName, 13);
     }
 
     /** Draws a lines between the node and its children.
      * @param g2d a graphical element. */
     private void drawLines(Graphics2D g2d) {
-
+        g2d.setColor(Color.BLACK);
         for (Node child : children) {
-            g2d.drawLine(x + NODE_WIDTH / 2, y + NODE_HEIGHT, child.x + child.NODE_WIDTH / 2, child.y);
+            g2d.drawLine(x, y + NODE_HEIGHT, child.x, child.y);
         }
     }
 
     public void addChild(Node node) {
         children.add(node);
+    }
+
+    /** Collapse or expand tree. */
+    public void setTreeCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+        for (Node child : children) {
+            child.setTreeCollapsed(collapsed);
+        }
+    }
+
+    public boolean isCollapsed() {
+        return collapsed;
     }
 
     public String getNodeName() {
@@ -225,5 +280,17 @@ public class Node {
 
     public NodeType getNodeType() {
         return this.nodeType;
+    }
+
+    public int getTopLeftX() {
+        return x - getWidth() / 2;
+    }
+
+    public int getWidth() {
+        return collapsed ? NODE_HEIGHT : NODE_WIDTH;
+    }
+
+    public int getHeight() {
+        return NODE_HEIGHT;
     }
 }
