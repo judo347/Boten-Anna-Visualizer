@@ -78,6 +78,8 @@ public class Node {
             this.nodeName = nodeName.replace("Task", "");
         } else if (isStringGuard(nodeName)){
             this.nodeName = nodeName.replace("Guard", "");
+        } else if (isStringSubtree(nodeName)){
+            this.nodeName = lineOrigin.replace("Subtree ", "");
         } else {
             this.nodeName = nodeName;
         }
@@ -89,6 +91,10 @@ public class Node {
 
     private boolean isStringGuard (String nodeName){
         return (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard"));
+    }
+
+    private boolean isStringSubtree (String nodeName){
+        return (nodeName.length() >= 7 && nodeName.substring(0, 7).equals("Subtree"));
     }
 
     /**
@@ -116,6 +122,8 @@ public class Node {
                     return NodeType.GUARD;
                 } else if (isStringTask(nodeName)) {
                     return NodeType.TASK;
+                } else if (isStringSubtree(nodeName)){
+                    return NodeType.SUBTREE;
                 }
         }
 

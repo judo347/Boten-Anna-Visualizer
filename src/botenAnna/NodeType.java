@@ -14,7 +14,8 @@ public enum NodeType {
     TASK("Task.png", Constants.TASK_COLOR),
     ALWAYS_FAILURE("AlwaysFailure.png", Constants.DECORATOR_COLOR),
     ALWAYS_SUCCESS("AlwaysSuccess.png", Constants.DECORATOR_COLOR),
-    IF_THEN_ELSE("IfThenElse.png", Constants.ABSOLUTE_COLOR);
+    IF_THEN_ELSE("IfThenElse.png", Constants.ABSOLUTE_COLOR),
+    SUBTREE("Subtree.png", Constants.SUBTREE);
 
     private Image image;
     private final Color color;
@@ -43,5 +44,6 @@ public enum NodeType {
         private static final Color ABSOLUTE_COLOR = Color.decode("#128277");
         private static final Color GUARD_COLOR = Color.decode("#c6d166");
         private static final Color TASK_COLOR = Color.decode("#B2473E");
+        private static final Color SUBTREE = Color.decode("#ff69b4");
     }
 }
