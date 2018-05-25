@@ -14,6 +14,7 @@ public class StructurePanel extends JPanel {
 
     private Node mainNodeStructure;
 
+    /** This is the content of the window that displays the tree structure. */
     public StructurePanel(Node mainNodeStructure) {
         this.mainNodeStructure = mainNodeStructure;
 
@@ -31,7 +32,9 @@ public class StructurePanel extends JPanel {
         setVisible(true);
     }
 
-    public void recalcSize() {
+    /** Recalculates the size of the content of the window.
+     *  Is currently only used when the mode is set to collapsed. */
+    public void recalculateSize() {
         //Get number of vertical and horizontal elements
         this.numberOfHorizontalElements = mainNodeStructure.getWidthOfTreeAsCount();
         this.numberOfVerticalElements = mainNodeStructure.getHeightOfTreeAsCount();
@@ -45,6 +48,7 @@ public class StructurePanel extends JPanel {
         repaint();
     }
 
+    /** Used to when painting. */
     public void paint(Graphics g){
         super.paint(g);
 
@@ -62,7 +66,7 @@ public class StructurePanel extends JPanel {
 
     public void toggleCollapseExpand() {
         mainNodeStructure.setTreeCollapsed(!mainNodeStructure.isCollapsed());
-        recalcSize();
+        recalculateSize();
     }
 
     public int getCanvasSizeHorizontal(){

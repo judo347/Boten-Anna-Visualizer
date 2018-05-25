@@ -5,8 +5,11 @@ import java.awt.*;
 public class DrawHelper {
 
     /** Draws the text and splits it at upper case letters
-     * @param g2d a graphical element.
-     * @param text the text to be drawn. */
+     *  @param g2d a graphical element.
+     *  @param x coordinate of the text.
+     *  @param centerY coordinate of the text.
+     *  @param text the text to be drawn.
+     *  @param maxCharsOnLine max number of chars per line. */
     public static void drawText(Graphics g2d, int x, int centerY, String text, int maxCharsOnLine){
 
         //Can the string be on one line

@@ -9,6 +9,9 @@ public class FileAnalyser {
 
     private int nextLine;
 
+    /** Displays a filechooser and lets the user choose a file.
+     *  @param frame the frame parent (will be locked while filechooser is displayed).
+     *  @return the file chosen by the user. */
     public File getFile(Frame frame){
         JFileChooser fc = new JFileChooser();
         int fcReturn = fc.showDialog(frame, null);
@@ -19,8 +22,8 @@ public class FileAnalyser {
         return fc.getSelectedFile();
     }
 
-    /** This method opens reads a file and build the tree.
-     * @param file a file with a formatted behaviour tree (usually from a fileChooser)
+    /** This method opens reads a file and builds the tree.
+     * @param file a file with a formatted behaviour tree (usually from a fileChooser).
      * @return the root node of the tree. */
     public Node getStructure(File file){
 
@@ -34,9 +37,9 @@ public class FileAnalyser {
         return mainNode;
     }
 
-    /** Loads all lines from a file into an arrayList of strings
-     * @param file a file
-     * @return an arrayList of strings containing all lines */
+    /** Loads all lines from a file into an arrayList of strings.
+     *  @param file the file to be analysed.
+     *  @return an arrayList of strings containing all lines from the file. */
     private ArrayList<String> loadFile(File file){
 
         ArrayList<String> array = new ArrayList<>();
@@ -58,7 +61,11 @@ public class FileAnalyser {
         return array;
     }
 
-    /** Calls fillArrayHELP. Read that one for description. */
+    /** Used to create a behavior tree of nodes from an array of lines (formatted).
+     *  See fillArrayHelp-method for further explanation.
+     *  @param fileLines an arrayList of strings.
+     *  @param mainNode the root node of a behaviour tree.
+     *  @return a root node containing the structure of the behavior tree. */
     private Node fillArray(ArrayList fileLines, Node mainNode){
 
         this.nextLine = 0;
@@ -69,7 +76,7 @@ public class FileAnalyser {
      *  behaviour tree structure from the given file.
      * @param fileLines an arrayList of strings.
      * @param node the root node of a behaviour tree.
-     * @return a root node containing the structure of the behaviour tree. */
+     * @return a root node containing the structure of the behavior tree. */
     private Node fillArrayHELP(ArrayList fileLines, Node node, int currentLine){
 
         nextLine++;
@@ -79,7 +86,6 @@ public class FileAnalyser {
         //Reached end of lines in fileLines CHECK
         if(fileLines.size() <= nextLine){
             return node;
-
         }
 
         int nextLineLevel = getLevel(fileLines.get(nextLine).toString());
@@ -114,27 +120,28 @@ public class FileAnalyser {
     /** Counts spaces or tabs from the start in a line and returns how many tabs that equals too.
      *  This is used to determine the level of a line. This is determined from how many tabs
      *  there is at the start of a line.
-     * @param line a string of text.
-     * @return number of tabs at the start of a line. */
+     *  @param line a string of text.
+     *  @return number of tabs at the start of a line. */
     private int getLevel(String line){
 
         int i = 0;
 
+        //SPACE check. If this line starts with a space: we count spaces.
         if(line.charAt(0) == ' '){
             while(line.charAt(i) == ' '){
                 i++;
             }
 
             return i/4;
+
+        //TAB check. If this line starts with a tab: we count tabs
         }else if(line.charAt(0) == '\t'){
             while(line.charAt(i) == '\t'){
                 i++;
             }
 
             return i;
-        }else{
-
+        }else
             return i;
-        }
     }
 }

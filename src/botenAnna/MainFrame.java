@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
      *  Call this and you will be asked to open a file.
      *  The files content should be a formatted behaviour tree
      *  and then this will be displayed as an image. */
-    public MainFrame() {
+    private MainFrame() {
 
         //Creating the frame (window)
         frame = new JFrame("Visualizer");
@@ -37,7 +37,8 @@ public class MainFrame extends JFrame {
         frame.setLocationRelativeTo(null);
     }
 
-    /** Adds components/content to to the frame. */
+    /** Adds components/content to to the frame.
+     *  @param pane the container that components get added too. */
     private void addComponentsToPane(final Container pane){
 
         pane.removeAll();
@@ -64,7 +65,6 @@ public class MainFrame extends JFrame {
         frame.add(mainPanel);
 
         //Save the current window size and pack frame
-        Dimension windowSize = frame.getSize();
         frame.pack();
         frame.setSize(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT);
     }

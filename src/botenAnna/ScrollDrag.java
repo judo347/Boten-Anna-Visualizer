@@ -9,12 +9,10 @@ public class ScrollDrag extends JPanel {
 
     private final int sizeW, sizeY;
 
-    /**
-     * This method adds a scroll panel to the window and the feature to drag using the mouse.
-     * @param panel Which JPanel to add this feature to.
-     * @param fullSizeWidth The full width size of the whole panel
-     * @param fullSizeHeight The full height size of the whole panel
-     */
+    /** This method adds a scroll panel to the window and the feature to drag using the mouse.
+     *  @param panel Which JPanel to add this feature to.
+     *  @param fullSizeWidth The full width size of the whole panel.
+     *  @param fullSizeHeight The full height size of the whole panel. */
     public ScrollDrag(JPanel panel, int fullSizeWidth, int fullSizeHeight) {
 
         // Store size variables so that it can be used in other methods

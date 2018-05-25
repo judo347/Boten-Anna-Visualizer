@@ -28,18 +28,17 @@ public class Node {
         setNameAndType();
     }
 
+    /** Sets the coordinates of this node. */
     private void setXYCoordinates(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    /**
-     * This method will set the coordinates for a node which will then be used to draw the behaviour tree.
-     * It uses recursion to find the respective positions relative to its parent nodes.
-     * @param startX X-Coordinate of the current node
-     * @param startY Y-Coordinate of the current node
-     * @param parentWidth The width of a parent node for which the child node will use to determine its position.
-     */
+    /** This method will set the coordinates for a node which will then be used to draw the behaviour tree.
+     *  It uses recursion to find the respective positions relative to its parent nodes.
+     *  @param startX X-Coordinate of the current node
+     *  @param startY Y-Coordinate of the current node
+     *  @param parentWidth The width of a parent node for which the child node will use to determine its position. */
     public void setCoordinates(int startX, int startY, int parentWidth) {
 
         // Sets the coordinates of the current node
@@ -67,11 +66,9 @@ public class Node {
         }
     }
 
-    /**
-     * Sets the name of a node by trimming the lineOrigin (full line) and removing
-     * unnecessary spacing and then assigning only the first element of the string.
-     * Also sets the type by using the getNodeTypeFromString method with the name of a node.
-     */
+    /** Sets the name of a node by trimming the lineOrigin (full line) and removing
+     *  unnecessary spacing and then assigning only the first element of the string.
+     *  Also sets the type by using the getNodeTypeFromString method with the name of a node. */
     private void setNameAndType() {
         String nodeName = getLineOrigin().trim().split(" ")[0];
         this.nodeType = getNodeTypeFromString(nodeName);
@@ -86,24 +83,25 @@ public class Node {
         }
     }
 
+    /** Checks the string: does it start with "TASK". */
     private boolean isStringTask (String nodeName){
         return (nodeName.length() >= 4 && nodeName.substring(0,4).equals("Task"));
     }
 
+    /** Checks the string: does it start with "GUARD". */
     private boolean isStringGuard (String nodeName){
         return (nodeName.length() >= 5 && nodeName.substring(0, 5).equals("Guard"));
     }
 
+    /** Checks the string: does it start with "SUBTREE". */
     private boolean isStringSubtree (String nodeName){
         return (nodeName.length() >= 7 && nodeName.substring(0, 7).equals("Subtree"));
     }
 
-    /**
-     * Checks a given string for which type of Node it is by comparing the text.
-     * If no recognized NodeType is found for the string it returns null.
-     * @param nodeName String which contains the nodeName.
-     * @return Returns NodeType of a given string.
-     */
+    /** Checks a given string for which type of Node it is by comparing the text.
+     *  If no recognized NodeType is found for the string it returns null.
+     *  @param nodeName String which contains the nodeName.
+     *  @return Returns NodeType of a given string. */
     private NodeType getNodeTypeFromString(String nodeName) {
         switch (nodeName) {
             case "Sequencer":
@@ -153,7 +151,7 @@ public class Node {
         }
     }
 
-    /** @return the width of this node's tree in pixels. This includes spacing */
+    /** @return the width of this node's tree in pixels. This includes spacing. */
     public int getWidthOfTreeGraphical() {
         if (children.size() == 0) {
             return getWidth() + HORIZONTAL_SPACING;
@@ -163,18 +161,19 @@ public class Node {
     }
 
     /** Used to get the number of levels in tree.
-     * @return number of levels in the tree. */
+     *  It is done by finding the longest branch.
+     *  @return number of levels in the tree. */
     public int getHeightOfTreeAsCount() {
         if (children.size() == 0)
             return 1;
         else {
             int largestBranchHeight = 0;
 
-            int brachHeight;
+            int branchHeight;
             for (int i = 0; i < children.size(); i++) {
-                brachHeight = children.get(i).getHeightOfTreeAsCount();
-                if (brachHeight > largestBranchHeight)
-                    largestBranchHeight = brachHeight;
+                branchHeight = children.get(i).getHeightOfTreeAsCount();
+                if (branchHeight > largestBranchHeight)
+                    largestBranchHeight = branchHeight;
             }
 
             return largestBranchHeight + 1;
@@ -191,7 +190,7 @@ public class Node {
     }
 
     /** This method draws a the node and all its children recursively.
-     * @param g2d a graphical element. */
+     *  @param g2d a graphical element. */
     public void drawTree(Graphics2D g2d) {
         if (collapsed) {
             drawCollapsed(g2d);
@@ -208,6 +207,7 @@ public class Node {
         }
     }
 
+    /** A draw method used by drawTree. This draws the node collapsed. */
     private void drawCollapsed(Graphics2D g2d) {
         int cornerX = getTopLeftX();
         int width = NODE_HEIGHT;
@@ -224,6 +224,7 @@ public class Node {
         g2d.drawImage(nodeType.getImage(), cornerX + BORDER_THICKNESS, y + BORDER_THICKNESS, imageWidth, imageHeight, null); //Image
     }
 
+    /** A draw method used by drawTree. This draws the node expanded. */
     private void drawExpanded(Graphics2D g2d) {
         int cornerX = getTopLeftX();
 
@@ -246,16 +247,12 @@ public class Node {
     }
 
     /** Draws a lines between the node and its children.
-     * @param g2d a graphical element. */
+     *  @param g2d a graphical element. */
     private void drawLines(Graphics2D g2d) {
         g2d.setColor(Color.BLACK);
         for (Node child : children) {
             g2d.drawLine(x, y + NODE_HEIGHT, child.x, child.y);
         }
-    }
-
-    public void addChild(Node node) {
-        children.add(node);
     }
 
     /** Collapse or expand tree. */
@@ -264,6 +261,10 @@ public class Node {
         for (Node child : children) {
             child.setTreeCollapsed(collapsed);
         }
+    }
+
+    public void addChild(Node node) {
+        children.add(node);
     }
 
     public boolean isCollapsed() {
